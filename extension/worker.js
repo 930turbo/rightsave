@@ -1,1 +1,1 @@
-importScripts("compat.js", "shared.js", "payments.js", "commerce.js", "background.js");
+importScripts("compat.js", "shared.js", "background.js");

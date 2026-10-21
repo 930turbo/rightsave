@@ -1,1 +1,173 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Privacy · RightSave</title><style>body{max-width:900px;margin:60px auto;padding:0 24px;background:#08090b;color:#f1f3f5;font:16px/1.7 system-ui}h1{font-size:54px;letter-spacing:-2px}h2{margin-top:36px}p,li{color:#b4b8bf}a{color:#d5e6f2}</style></head><body><a href="https://github.com/930turbo/rightsave">RightSave</a><h1>Privacy</h1><p>Updated October 21, 2026. RightSave saves media locally. There is no analytics or advertising SDK, and no developer-operated media or billing server. Downloads and requested previews contact their original hosts.</p><h2>Page processing</h2><p>Enhanced detection is on by default. On supported social sites it reads media fields from selected API/GraphQL responses the page already requested. Response text is processed transiently, up to 2 MiB per response and two concurrent fetch readers. Only extracted media URLs, short labels, dimensions, posters and post links enter a bounded page cache. It does not send these to the developer or payment provider, read request bodies or make extra platform API calls.</p><p>The cache clears on detected route changes, feature opt-out, host exclusion and document closure. Explicit scans also read DOM media, embedded JSON, Open Graph and JSON-LD. You can disable enhanced detection in Settings.</p><h2>Stored on your device</h2><p>Preferences, license tokens or purchase keys and instance IDs, last license-check times, and explicitly saved workflows use browser local storage. Workflows can contain search text, filters and naming templates. Delete them in the library. Temporary libraries, page URLs, observed video URLs and download bookkeeping use session storage. The browser keeps its own download history.</p><p>ZIP contents stay in memory until download. Explicitly exported workflow packs and source records are files you explicitly export. Records include filenames, dimensions, byte counts and source links with query strings and fragments removed. URL paths can still identify a private post; keep exported records private. Imported packs are validated and stored locally.</p><p>Copy link writes only the chosen media URL to the clipboard when clicked. Gallery filters and repeated-link hiding run locally. Optional licensed conversion decodes and re-encodes still images on this device; metadata and animation are not retained. Exact duplicate removal hashes file bytes locally and does not upload hashes or media.</p><h2>Optional licensed builds</h2><p>The public Free build has no configured payment provider and makes no billing requests. In an explicitly configured paid build, clicking a purchase link opens Lemon Squeezy hosted checkout. The provider processes payment details under <a href="https://www.lemonsqueezy.com/privacy">its own privacy policy</a>. RightSave does not receive card details.</p><p>Activating a paid license sends the key and a random browser-instance label to <code>api.lemonsqueezy.com</code>. Later validation and deactivation send the key and provider instance ID. Your IP address is visible to the provider as with any direct HTTPS request. Checks happen when paid features are used, usually after 24 hours or when a new background session starts. An explicit Check license button forces a check.</p><p>Provider replies may include purchase and customer information. RightSave retains only the license key, instance ID, configured product identity, tier, expiry and check time. It does not retain customer names or emails. Browsing history, page scans, saved files and media URLs are not sent in license requests. There is up to a seven-day offline grace period after a successful check.</p><p>Deactivate this browser releases its provider activation and removes the purchase key locally. A failed request keeps the key and instance so you can retry. Losing or uninstalling a profile does not automatically release its provider activation; contact the merchant for recovery. Separate signed offline licenses are verified locally and make no billing requests.</p><h2>Permissions</h2><p>Website access discovers chosen media and restores right-click. Menus adds the native submenu; downloads opens Save As; scripting scans frames; storage saves preferences and temporary lists. Firefox cookies permission passes the correct container ID to its download manager; RightSave never reads cookie values. Optional webRequest observes video response URLs/content types and starts disabled. A merchant-configured Firefox build declares authentication-information transmission for license checking; the default Free build declares no data collection.</p><h2>Questions</h2><p>Use <a href="https://github.com/930turbo/rightsave/issues">GitHub Issues</a> for general questions. Never publish purchase keys, cookies, signed media links or private files in a report. Ask for private purchase recovery through the merchant contact on your receipt.</p></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Privacy · RightSave</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        max-width: 960px;
+        margin: 50px auto;
+        padding: 0 24px;
+        background: #090c10;
+        color: #f4f6f8;
+        font: 16px/1.7 system-ui;
+      }
+      h1 {
+        font-size: clamp(38px, 6vw, 58px);
+        line-height: 1.1;
+        letter-spacing: -0.05em;
+      }
+      h2 {
+        margin-top: 36px;
+        font-size: 23px;
+      }
+      p,
+      li {
+        color: #a6b3c2;
+      }
+      a {
+        color: #c7dfeb;
+        text-underline-offset: 4px;
+      }
+      code {
+        color: #f4f6f8;
+        overflow-wrap: anywhere;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 14px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 12px;
+        border-bottom: 1px solid #303c47;
+        vertical-align: top;
+      }
+      pre {
+        white-space: pre-wrap;
+      }
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        border-bottom: 1px solid #303c47;
+        padding-bottom: 20px;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+      }
+      :focus-visible {
+        outline: 2px solid #b5d6e7;
+        outline-offset: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="https://github.com/930turbo/rightsave">RightSave</a
+      ><a href="https://github.com/930turbo/rightsave/releases/latest"
+        >Downloads</a
+      >
+    </nav>
+    <h1>Privacy</h1>
+    <p>
+      Updated October 21, 2026, for RightSave 5.0. RightSave saves files on your
+      device. It has no account system, checkout, license checks, advertising or
+      analytics. The developer does not receive your media, page lists or
+      troubleshooting summaries. Previews and downloads contact the original
+      media hosts, which can see those requests and your IP address.
+    </p>
+    <h2>Reading a page</h2>
+    <p>
+      RightSave scans media on webpages you use. Enhanced social-site detection
+      is on by default. On supported sites it reads media fields from selected
+      API or GraphQL responses the page already requested. It does not make
+      extra platform API requests or read request bodies. Raw response text is
+      processed transiently, with a 2 MiB response limit and two concurrent
+      readers. Only extracted media URLs, short labels, dimensions, posters and
+      post links enter a bounded page cache.
+    </p>
+    <p>
+      Page caches clear on detected route changes, feature opt-out, site
+      exclusion and document closure. Explicit scans also read visible and
+      lazy-loaded media, CSS images, embedded JSON, Open Graph and JSON-LD. Turn
+      off enhanced detection in Settings if you prefer ordinary page scanning.
+    </p>
+    <h2>What stays in this browser</h2>
+    <p>
+      Preferences, dismissed tips and explicitly saved workflows use browser
+      local storage. Workflows contain filters, search text, preview size and
+      naming rules; they do not contain a saved page history. Delete a workflow
+      in the library. Temporary libraries, source page URLs, observed video URLs
+      and download bookkeeping use session storage. A library’s stored list
+      clears when its source tab or library tab closes. Older lists also expire
+      during cleanup after two hours. The browser keeps its own download history
+      separately.
+    </p>
+    <p>
+      Optional direct-video request detection starts disabled. With permission,
+      it observes video response URLs and content types, not bodies. These URLs
+      clear on source navigation, tab closure, permission removal or browser
+      restart. Excluded sites are skipped. Clear temporary media lists in
+      Settings to discard saved scans immediately. Existing open libraries may
+      still display their in-memory list until you close them.
+    </p>
+    <h2>Files you choose to export</h2>
+    <p>
+      ZIP files, image conversion and duplicate comparisons run locally. ZIP
+      contents stay in memory until saved. Conversion removes image metadata and
+      animation. Copy link writes the exact selected URL to the clipboard only
+      when clicked; signed links may contain access tokens and should be kept
+      private.
+    </p>
+    <p>
+      Source lists and optional CSV/JSON records remove URL credentials, query
+      strings and fragments. Paths, labels and filenames can still reveal
+      private posts or content. These are source records, not restorable
+      download queues. Exported workflow packs contain your chosen settings.
+      Treat these files as private when appropriate. No file is automatically
+      uploaded.
+    </p>
+    <p>
+      Troubleshooting summaries are prepared only when requested and show
+      extension/browser versions and a small set of settings. They omit page
+      addresses, media URLs, filenames, accounts and browsing history. You
+      choose whether to copy or share them.
+    </p>
+    <h2>Permissions</h2>
+    <p>
+      Website access finds media and restores right-click across sites. Menus
+      adds the browser submenu; downloads opens Save As; scripting scans
+      accessible frames; storage keeps preferences and temporary lists.
+      Firefox’s cookies permission passes the appropriate container ID to its
+      download manager. RightSave never reads cookie values. ZIP and conversion
+      cannot use Firefox container sessions; use individual saves there.
+      Optional webRequest supports direct-video URL detection and is not
+      required for normal saving.
+    </p>
+    <p>
+      The Firefox package declares no developer data collection. There is no
+      remote executable code, third-party runtime SDK or developer backend.
+      Following a GitHub, privacy or support link opens that site under its own
+      policies.
+    </p>
+    <h2>Questions</h2>
+    <p>
+      Use
+      <a href="https://github.com/930turbo/rightsave/issues">GitHub Issues</a>
+      for general questions. Do not include private media, signed links, cookies
+      or other account details in public reports.
+    </p>
+  </body>
+</html>

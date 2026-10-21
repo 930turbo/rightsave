@@ -14,6 +14,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
+      - run: npm audit --audit-level=moderate
+      - run: npm run format:check
       - run: npm run build
       - run: npm test
       - run: npm run lint:firefox

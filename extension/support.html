@@ -1,5 +1,237 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Help · RightSave</title><link rel="stylesheet" href="app.css"></head><body><div class="shell settings-shell"><header class="masthead"><a class="brand" href="options.html"><img src="icon.svg" width="34" height="34" alt=""><span>RightSave</span></a><nav aria-label="Main navigation"><a href="options.html">Settings</a><a href="https://github.com/930turbo/rightsave/issues" target="_blank" rel="noreferrer">Get help</a></nav></header><main><h1>Find it.<br>Keep it.</h1><p class="lead">RightSave Free runs on your device. You can save as many individual images and direct videos as you like.</p><p id="status" class="notice" role="status" aria-live="polite">Loading…</p>
-<div class="help-grid"><section class="settings-group"><h2>Saving a file</h2><p>Right-click the media and choose its filename and folder. Turn off direct right-click saving in Settings to use the browser’s RightSave submenu.</p><p class="small muted"><kbd>Shift</kbd> + right-click opens the usual browser menu. <kbd>Alt</kbd> + right-click gives the website control.</p></section><section class="settings-group"><h2>Finding more</h2><p>Open a post, scroll its carousel or play its video, then rescan. Use format, shape and width filters to narrow the gallery. Click a loaded image to browse a larger preview with the arrow keys.</p></section><section class="settings-group"><h2>A preview will not load</h2><p>The media host may require you to be signed in or may block previews. Keep the post open and try saving the original. Load all previews never starts downloads.</p></section><section class="settings-group"><h2>Videos and temporary files</h2><p>Direct MP4 and WebM files can be saved. Protected playback and segmented streams are not combined. Video-only tracks are labeled. Firefox’s .part file is temporary; wait for Downloads to finish.</p></section></div>
-<section id="paid-tools" class="settings-group" hidden><h2>RightSave Plus</h2><p>One optional upgrade brings together ZIP collections, exact-file duplicate removal, batch naming, saved and shared workflows, source records and still-image conversion. Everything runs locally.</p><p id="price" class="lead"></p><a id="checkout" class="primary checkout-link" hidden target="_blank" rel="noreferrer">Get Plus</a><p id="checkout-pending" class="small muted">Checkout is not configured in this build.</p><p id="sales-note" class="small muted support-pending">One-time purchase. No automatic renewal. The checkout shows the final amount and any tax.</p><a id="orders" class="text-link" href="https://app.lemonsqueezy.com/my-orders" hidden target="_blank" rel="noreferrer">Receipts and purchases</a></section>
-<details id="license-tools" class="license-tools" hidden><summary>Activate or manage a license</summary><p class="small muted" id="license-help">Activation sends your license key and a random browser label to the license provider. Browsing history and saved files are not sent.</p><label class="stack-label">License key<textarea id="license" rows="2" autocomplete="off" spellcheck="false" placeholder="From your purchase email"></textarea></label><div class="actions"><button id="activate" disabled class="primary">Activate license</button><button id="refresh-license" disabled class="secondary">Check license</button><button id="remove-license" disabled class="secondary">Deactivate this browser</button></div></details>
-<footer><p><a href="welcome.html">Quick start</a> · <a href="options.html">Settings</a> · <a href="https://github.com/930turbo/rightsave" target="_blank" rel="noreferrer">Source and local downloads</a></p><p>No analytics, advertising or media uploads.</p></footer></main></div><script src="compat.js"></script><script src="payments.js"></script><script src="commerce.js"></script><script src="support.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>How to use RightSave · RightSave</title>
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <div class="shell settings-shell">
+      <header class="masthead">
+        <a class="brand" href="welcome.html"
+          ><img src="icon.svg" width="34" height="34" alt="" /><span
+            >RightSave</span
+          ></a
+        >
+        <nav aria-label="Main navigation">
+          <a href="support.html">How to use it</a
+          ><a href="options.html">Settings</a>
+        </nav>
+      </header>
+      <main>
+        <div class="help-heading">
+          <h1>A hand<br />when you need it.</h1>
+          <p class="lead">
+            A few short guides, a practice save and answers to the things that
+            usually get in the way.
+          </p>
+        </div>
+        <p id="status" class="notice" role="status" aria-live="polite">
+          RightSave Free. Every tool is included.
+        </p>
+        <label class="help-search"
+          ><span class="sr-only">Search help</span
+          ><input
+            id="help-search"
+            type="search"
+            placeholder="Search help: ZIP, video, right-click…"
+        /></label>
+        <nav class="help-topics" aria-label="Help topics">
+          <a href="#first">First save</a><a href="#collections">Collections</a
+          ><a href="#video">Videos</a
+          ><a href="#troubleshooting">Something stuck?</a>
+        </nav>
+        <div class="help-articles">
+          <section class="help-article" id="first" data-help>
+            <h2>Save your first file</h2>
+            <p>
+              Open a webpage and right-click the image you want. Choose a
+              filename and folder in Save As. If direct saving is off, use the
+              RightSave submenu instead.
+            </p>
+            <button class="text-button" data-guide="first">
+              Show me step by step
+            </button>
+            <p class="small muted">
+              <kbd>Shift</kbd> + right-click opens the usual browser menu.
+              <kbd>Alt</kbd> + right-click gives the website control.
+            </p>
+          </section>
+          <section class="help-article" id="collections" data-help>
+            <h2>Save several files in one ZIP</h2>
+            <p>
+              Open the media library from the toolbar. Load previews, open
+              Filters &amp; collection tools and select your files. Save
+              selected as ZIP gives you one file and one Save As dialog.
+            </p>
+            <button class="text-button" data-guide="collections">
+              Build a collection
+            </button>
+            <p class="small muted">
+              Up to 100 files, 40 MB per file and 150 MB total. Source records
+              leave room for 98 media files. If a host blocks ZIP requests, save
+              its files individually.
+            </p>
+          </section>
+          <section class="help-article" id="video" data-help>
+            <h2>Find a video on a social site</h2>
+            <p>
+              Open the post itself and play the video before scanning. Scroll
+              through carousels, then rescan. Instagram, Facebook, X, Reddit,
+              Threads and LinkedIn can expose different files after playback.
+            </p>
+            <button class="text-button" data-guide="video">
+              Find the video file
+            </button>
+            <p class="small muted">
+              Direct MP4, WebM and Ogg files work when exposed by the page.
+              HLS/DASH segments and protected streams cannot be combined. A
+              Video only label means audio is separate. Site changes can affect
+              detection.
+            </p>
+          </section>
+          <section class="help-article" id="convert" data-help>
+            <h2>Resize or change an image format</h2>
+            <p>
+              Load an image preview and click it. Open Convert a still image,
+              choose PNG, JPEG or WebP, then save a converted copy. The original
+              stays available.
+            </p>
+            <button class="text-button" data-guide="convert">
+              Convert an image
+            </button>
+            <p class="small muted">
+              Conversion runs on this device. JPEG uses a white background.
+              Animation becomes one frame and metadata is removed. Source limit:
+              16 megapixels and 40 MB.
+            </p>
+          </section>
+          <section class="help-article" id="workflows" data-help>
+            <h2>Remember your filters and filenames</h2>
+            <p>
+              Under Saved workflows, name the current setup and save it. Apply
+              it next time to restore filters, preview size and naming rules.
+              Export a workflow pack to move it to another browser.
+            </p>
+            <button class="text-button" data-guide="workflows">
+              Set up a workflow
+            </button>
+            <p class="small muted">
+              Use {name}, {ext}, {index}, {site} and {date} in a filename
+              template. For example: {site}/{name}-{index}.{ext}. Up to 20
+              workflows are stored locally.
+            </p>
+          </section>
+          <section class="help-article" id="troubleshooting" data-help>
+            <h2>Nothing appears, or a save fails</h2>
+            <ol>
+              <li>Refresh the source webpage after installing RightSave.</li>
+              <li>
+                Open the post rather than its feed preview. Scroll or play it,
+                then rescan.
+              </li>
+              <li>
+                Keep the source tab open and stay signed into the site if it
+                requires it.
+              </li>
+              <li>
+                Try Save original or Open original. A blocked preview does not
+                always prevent saving.
+              </li>
+            </ol>
+            <p>
+              Firefox’s <strong>.part</strong> file is temporary. Wait for
+              Downloads to finish. Expired links need a fresh scan. Browser
+              settings pages and add-on store pages restrict extensions.
+            </p>
+            <p class="small muted">
+              Firefox containers work with individual saves. ZIP and conversion
+              cannot use a container session; the app explains this when you
+              try.
+            </p>
+          </section>
+          <section class="help-article practice-panel" id="practice" data-help>
+            <div>
+              <h2>Try it here</h2>
+              <p>
+                This small drawing is bundled with RightSave. Use Save practice
+                image to try the file dialog without leaving this page. You can
+                also right-click the drawing to try your browser’s image menu.
+              </p>
+              <button id="practice-save" class="primary">
+                Save practice image
+              </button>
+              <p
+                id="practice-status"
+                class="status"
+                role="status"
+                aria-live="polite"
+              ></p>
+            </div>
+            <img
+              src="practice.svg"
+              width="600"
+              height="400"
+              alt="A simple mountain and lake drawing for practicing a save"
+            />
+          </section>
+        </div>
+        <p id="help-empty" class="empty" hidden>
+          No matching guide. Try “save”, “video”, “ZIP” or “workflow”.
+        </p>
+        <section class="settings-group">
+          <h2>Still stuck?</h2>
+          <p class="lead">
+            Copy a short troubleshooting summary for a bug report. It contains
+            the extension and browser versions plus a few on/off settings.
+            Review it before sharing.
+          </p>
+          <div class="actions support-actions">
+            <button id="diagnostics" class="secondary">
+              Prepare troubleshooting info</button
+            ><a
+              href="https://github.com/930turbo/rightsave/issues/new?template=bug.yml"
+              target="_blank"
+              rel="noreferrer"
+              >Report a problem</a
+            >
+          </div>
+          <textarea
+            id="diagnostic-output"
+            rows="7"
+            readonly
+            aria-label="Troubleshooting information"
+            hidden
+          ></textarea
+          ><button id="copy-diagnostics" class="text-button" hidden>
+            Copy this summary
+          </button>
+          <p class="small muted support-pending">
+            No page addresses, media links, filenames, account details or
+            browsing history are included. Do not add private content to a
+            public issue.
+          </p>
+        </section>
+        <footer>
+          <p>
+            <a href="welcome.html">Start here</a> ·
+            <a href="options.html">Settings</a> ·
+            <a
+              href="https://930turbo.github.io/rightsave/privacy.html"
+              target="_blank"
+              rel="noreferrer"
+              >Privacy</a
+            >
+          </p>
+          <p>
+            All guides work offline. Files are fetched from their original hosts
+            when you choose to preview or save.
+          </p>
+        </footer>
+      </main>
+    </div>
+    <script src="compat.js"></script>
+    <script src="support.js"></script>
+  </body>
+</html>

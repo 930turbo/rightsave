@@ -1,1 +1,127 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Website compatibility · RightSave</title><style>body{max-width:920px;margin:50px auto;padding:0 25px;background:#08090b;color:#f1f3f5;font:15px/1.7 system-ui}h1{font-size:46px;letter-spacing:-2px}h2{margin-top:36px}p,li{color:#b4b8bf}a{color:#d5e6f2}table{border-collapse:collapse;width:100%}td,th{text-align:left;padding:12px;border-bottom:1px solid #34383e}code{color:#f1f3f5}nav{display:flex;gap:24px;border-bottom:1px solid #34383e;padding-bottom:20px}</style></head><body><nav><a href="https://github.com/930turbo/rightsave">RightSave</a><a href="https://github.com/930turbo/rightsave/releases">Downloads</a></nav><h1>Website compatibility</h1><p>Adapters improve media discovery on Instagram, Facebook, X/Twitter, Reddit, Threads and LinkedIn. They are not a guarantee for every post.</p><table><tr><th>Site</th><th>Sources</th><th>Limits</th></tr><tr><td>Instagram / Threads</td><td>Carousel images, progressive video versions, embedded and loaded page data</td><td>Open the post and play video first. Login and signed-link expiry apply.</td></tr><tr><td>Facebook</td><td>SD/HD native and progressive video fields in loaded GraphQL data</td><td>DASH-only and protected playback cannot be merged.</td></tr><tr><td>X / Twitter</td><td>MP4 variants, post/poster matching, original-size image candidates</td><td>HLS-only players remain limited.</td></tr><tr><td>Reddit</td><td>Gallery metadata, full-size candidates and fallback videos</td><td>Separate-audio tracks are labeled Video only. No audio merging.</td></tr><tr><td>LinkedIn</td><td>Progressive streams, image artifacts and loaded Voyager data</td><td>Signed URLs expire. Protected/stream-only players remain limited.</td></tr></table><h2>Use it</h2><p>Refresh pages after installing. Open the post or carousel, play video, then right-click or Rescan. Related media is matched to its poster, URL or an unambiguous post link; another cached post is not silently substituted.</p><h2>Verification</h2><p>Automated tests cover representative synthetic data for all six platforms, plus real browser execution worlds and saved bytes using local fixtures. They do not certify logged-in live feeds. Layouts, payloads, login rules and link lifetimes change.</p><h2>ZIP export</h2><p>Pro ZIP export supports up to 100 files, 40 MB per file and 150 MB total. It fetches media locally with the browser session; some authenticated or hotlink-protected sources can reject it. Firefox container sessions should use individual Save As. Protected playback and segmented streams are not assembled.</p></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Website compatibility · RightSave</title>
+    <style>
+      body {
+        max-width: 920px;
+        margin: 50px auto;
+        padding: 0 25px;
+        background: #08090b;
+        color: #f1f3f5;
+        font: 15px/1.7 system-ui;
+      }
+      h1 {
+        font-size: 46px;
+        letter-spacing: -2px;
+      }
+      h2 {
+        margin-top: 36px;
+      }
+      p,
+      li {
+        color: #b4b8bf;
+      }
+      a {
+        color: #d5e6f2;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      td,
+      th {
+        text-align: left;
+        padding: 12px;
+        border-bottom: 1px solid #34383e;
+      }
+      code {
+        color: #f1f3f5;
+      }
+      nav {
+        display: flex;
+        gap: 24px;
+        border-bottom: 1px solid #34383e;
+        padding-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="https://github.com/930turbo/rightsave">RightSave</a
+      ><a href="https://github.com/930turbo/rightsave/releases">Downloads</a>
+    </nav>
+    <h1>Website compatibility</h1>
+    <p>
+      Adapters improve media discovery on Instagram, Facebook, X/Twitter,
+      Reddit, Threads and LinkedIn. They are not a guarantee for every post.
+    </p>
+    <table>
+      <tr>
+        <th>Site</th>
+        <th>Sources</th>
+        <th>Limits</th>
+      </tr>
+      <tr>
+        <td>Instagram / Threads</td>
+        <td>
+          Carousel images, progressive video versions, embedded and loaded page
+          data
+        </td>
+        <td>
+          Open the post and play video first. Login and signed-link expiry
+          apply.
+        </td>
+      </tr>
+      <tr>
+        <td>Facebook</td>
+        <td>
+          SD/HD native and progressive video fields in loaded GraphQL data
+        </td>
+        <td>DASH-only and protected playback cannot be merged.</td>
+      </tr>
+      <tr>
+        <td>X / Twitter</td>
+        <td>
+          MP4 variants, post/poster matching, original-size image candidates
+        </td>
+        <td>HLS-only players remain limited.</td>
+      </tr>
+      <tr>
+        <td>Reddit</td>
+        <td>Gallery metadata, full-size candidates and fallback videos</td>
+        <td>Separate-audio tracks are labeled Video only. No audio merging.</td>
+      </tr>
+      <tr>
+        <td>LinkedIn</td>
+        <td>Progressive streams, image artifacts and loaded Voyager data</td>
+        <td>
+          Signed URLs expire. Protected/stream-only players remain limited.
+        </td>
+      </tr>
+    </table>
+    <h2>Use it</h2>
+    <p>
+      Refresh pages after installing. Open the post or carousel, play video,
+      then right-click or Rescan. Related media is matched to its poster, URL or
+      an unambiguous post link; another cached post is not silently substituted.
+    </p>
+    <h2>Verification</h2>
+    <p>
+      Automated tests cover representative synthetic data for all six platforms,
+      plus real browser execution worlds and saved bytes using local fixtures.
+      They do not certify logged-in live feeds. Layouts, payloads, login rules
+      and link lifetimes change.
+    </p>
+    <h2>ZIP export</h2>
+    <p>
+      ZIP export supports up to 100 files, 40 MB per file and 150 MB total. It
+      fetches media locally with the browser session; some authenticated or
+      hotlink-protected sources can reject it. Firefox container sessions should
+      use individual Save As. Protected playback and segmented streams are not
+      assembled.
+    </p>
+  </body>
+</html>

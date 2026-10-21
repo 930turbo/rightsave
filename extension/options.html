@@ -1,8 +1,147 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Settings · RightSave</title><link rel="stylesheet" href="app.css"></head><body><div class="shell settings-shell"><header class="masthead"><a class="brand" href="options.html"><img src="icon.svg" width="34" height="34" alt=""><span>RightSave</span></a><nav aria-label="Main navigation"><a href="support.html">Help</a><a id="repo" href="https://github.com/930turbo/rightsave" target="_blank" rel="noreferrer">GitHub ↗</a></nav></header>
-<main><p class="eyebrow">Settings</p><h1>Make it yours.</h1><p class="lead">Make saving feel natural. Changes apply to open webpages immediately. Every media save opens a location dialog.</p><p id="status" class="notice" hidden role="status" aria-live="polite"></p>
-<section class="settings-group"><h2>Right-click</h2><label class="setting"><span>Open Save As directly<small>Right-click media to choose a filename and folder. Turn off to use the RightSave submenu.</small></span><input id="quick" type="checkbox" role="switch"></label><p class="small muted"><kbd>Shift</kbd> + right-click for the browser menu. <kbd>Alt</kbd> + right-click for website controls. <kbd>Alt + Shift + S</kbd> opens the library.</p></section>
-<section class="settings-group"><h2>Library</h2><label class="setting"><span>Preview size<small>Give your media more room.</small></span><select id="size"><option value="large">Large</option><option value="xl">Extra large</option></select></label><label class="setting"><span>Appearance<small>Dark by default. Yours to change.</small></span><select id="theme"><option value="dark">Dark</option><option value="light">Light</option><option value="system">System</option></select></label></section>
-<section class="settings-group"><h2>Website compatibility</h2><label class="setting"><span>Enhanced social-site detection<small>Find media URLs in page data and responses already loaded by Instagram, Facebook, X, Reddit, Threads, and LinkedIn. Only extracted media fields are kept in page memory. No extra API requests or uploads.</small></span><input id="social" type="checkbox" role="switch"></label><p class="small muted">Open the post or carousel, play its video, then rescan the library. The source site may still require you to be signed in. Site exceptions also disable response observation.</p><label class="setting"><span>Detect direct video requests<small>Optional permission to observe video response URLs in this session. Helps when a player’s file URL is missing from the page.</small></span><input id="network" type="checkbox" role="switch"></label><p class="small muted">Enable before playing a video, then rescan. URLs stay in session memory and clear on navigation, tab close, or browser restart. No request bodies, decryption, or stream merging.</p></section>
-<section class="settings-group"><h2>Site exceptions</h2><label class="stack-label">Disable right-click changes on these hostnames, one per line<textarea id="sites" rows="4" placeholder="example.com"></textarea></label><button id="save-sites" class="secondary">Save exceptions</button></section>
-<footer><p>RightSave 4 · Free for Firefox &amp; Chrome. <a href="welcome.html">Quick start</a> · <a href="support.html">Help</a></p><p>Local saving. Your files stay on your device.</p></footer></main></div><script src="compat.js"></script><script src="options.js"></script></body></html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Settings · RightSave</title>
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <div class="shell settings-shell">
+      <header class="masthead">
+        <a class="brand" href="options.html"
+          ><img src="icon.svg" width="34" height="34" alt="" /><span
+            >RightSave</span
+          ></a
+        >
+        <nav aria-label="Main navigation">
+          <a href="support.html">Help</a
+          ><a
+            id="repo"
+            href="https://github.com/930turbo/rightsave"
+            target="_blank"
+            rel="noreferrer"
+            >GitHub ↗</a
+          >
+        </nav>
+      </header>
+      <main>
+        <p class="eyebrow">Settings</p>
+        <h1>Set it up your way.</h1>
+        <p class="lead">
+          Choose how RightSave behaves. Changes apply to open webpages
+          immediately. Every media save lets you choose a folder.
+        </p>
+        <p
+          id="status"
+          class="notice"
+          hidden
+          role="status"
+          aria-live="polite"
+        ></p>
+        <section class="settings-group">
+          <h2>Right-click</h2>
+          <label class="setting"
+            ><span
+              >Open Save As directly<small
+                >Right-click media to choose a filename and folder. Turn off to
+                use the RightSave submenu.</small
+              ></span
+            ><input id="quick" type="checkbox" role="switch"
+          /></label>
+          <p class="small muted">
+            <kbd>Shift</kbd> + right-click for the browser menu.
+            <kbd>Alt</kbd> + right-click for website controls.
+            <kbd>Alt + Shift + S</kbd> opens the library.
+          </p>
+        </section>
+        <section class="settings-group">
+          <h2>Library</h2>
+          <label class="setting"
+            ><span>Preview size<small>Give your media more room.</small></span
+            ><select id="size">
+              <option value="large">Large</option>
+              <option value="xl">Extra large</option>
+            </select></label
+          ><label class="setting"
+            ><span
+              >Appearance<small>Dark by default. Yours to change.</small></span
+            ><select id="theme">
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
+              <option value="system">System</option>
+            </select></label
+          >
+        </section>
+        <section class="settings-group">
+          <h2>Website compatibility</h2>
+          <label class="setting"
+            ><span
+              >Enhanced social-site detection<small
+                >Find media URLs in page data and responses already loaded by
+                Instagram, Facebook, X, Reddit, Threads, and LinkedIn. Only
+                extracted media fields are kept in page memory. No extra API
+                requests or uploads.</small
+              ></span
+            ><input id="social" type="checkbox" role="switch"
+          /></label>
+          <p class="small muted">
+            Open the post or carousel, play its video, then rescan the library.
+            The source site may still require you to be signed in. Site
+            exceptions also disable response observation.
+          </p>
+          <label class="setting"
+            ><span
+              >Detect direct video requests<small
+                >Optional permission to observe video response URLs in this
+                session. Helps when a player’s file URL is missing from the
+                page.</small
+              ></span
+            ><input id="network" type="checkbox" role="switch"
+          /></label>
+          <p class="small muted">
+            Enable before playing a video, then rescan. URLs stay in session
+            memory and clear on navigation, tab close, or browser restart. No
+            request bodies, decryption, or stream merging.
+          </p>
+        </section>
+        <section class="settings-group">
+          <h2>Site exceptions</h2>
+          <label class="stack-label"
+            >Disable right-click changes on these hostnames, one per
+            line<textarea
+              id="sites"
+              rows="4"
+              placeholder="example.com"
+            ></textarea></label
+          ><button id="save-sites" class="secondary">Save exceptions</button>
+        </section>
+        <section class="settings-group">
+          <h2>Your local data</h2>
+          <p class="small muted">
+            Saved workflows and preferences stay in this browser. Temporary
+            media lists are cleared when their library or source tab closes.
+            Clear lists to discard scans now; downloaded files are kept.
+          </p>
+          <button id="clear-lists" class="secondary support-actions">
+            Clear temporary media lists
+          </button>
+          <p class="small muted support-pending">
+            <a href="support.html">How-to guides and troubleshooting</a> ·
+            <a href="welcome.html">Open the quick start again</a>
+          </p>
+        </section>
+        <footer>
+          <p>
+            RightSave 5 · Free for Firefox &amp; Chrome.
+            <a href="welcome.html">Quick start</a> ·
+            <a href="support.html">Help</a>
+          </p>
+          <p>Local saving. Your files stay on your device.</p>
+        </footer>
+      </main>
+    </div>
+    <script src="compat.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

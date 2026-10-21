@@ -1,7 +1,112 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Quick start · RightSave</title><link rel="stylesheet" href="app.css"></head><body><div class="shell settings-shell"><header class="masthead"><a class="brand" href="options.html"><img src="icon.svg" width="34" height="34" alt=""><span>RightSave</span></a><nav aria-label="Main navigation"><a href="options.html">Settings</a><a href="https://github.com/930turbo/rightsave" target="_blank" rel="noreferrer">GitHub ↗</a></nav></header><main>
-<p class="eyebrow">Quick start</p><h1>Ready to save.</h1><p class="lead">Pin RightSave in your browser’s Extensions menu. Open a webpage, then right-click an image or supported video to choose a filename and folder.</p>
-<section class="settings-group"><h2>Your first save</h2><ol class="start-steps"><li>Refresh webpages that were open before installing.</li><li>Open the post or image you want. Play a video first if its file is hidden behind a player.</li><li>Right-click the media for Save As, or click RightSave in the toolbar and choose Open media library.</li><li>In the library, choose Load all previews. Rescan after scrolling or opening a carousel to discover newly loaded media.</li></ol></section>
-<section class="settings-group"><h2>Social websites</h2><p class="small muted">Enhanced detection supports media-data patterns used by Instagram, Facebook, X, Reddit, Threads, and LinkedIn. It reads media URLs from content your browser has already loaded. Use the site normally, including signing in when required. Nothing is uploaded to RightSave.</p><p class="small muted support-pending">Direct MP4/WebM files can be saved. Protected playback and segmented HLS/DASH streams cannot be combined in this build. Reddit’s separate video track is clearly marked Video only. Site changes can affect compatibility.</p></section>
-<section class="settings-group"><h2>Make it yours</h2><p class="small muted">Turn off Right-click Save As to use the browser’s RightSave submenu. Hold <kbd>Shift</kbd> while right-clicking for the normal browser menu, or <kbd>Alt</kbd> for website controls. <kbd>Alt + Shift + S</kbd> opens the library.</p><div class="actions support-actions"><a class="primary setup-link" href="options.html">Open settings</a><a href="https://github.com/930turbo/rightsave/issues/new?template=bug.yml" target="_blank" rel="noreferrer">Report a compatibility issue ↗</a></div></section>
-<footer><p>No account, analytics, or hidden billing. Core saving stays free. Firefox and Chrome local builds have separate installation steps; the repository has the latest release instructions.</p></footer></main></div><script src="compat.js"></script><script src="welcome.js"></script></body></html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Start here · RightSave</title>
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <div class="shell settings-shell">
+      <header class="masthead">
+        <a class="brand" href="welcome.html"
+          ><img src="icon.svg" width="34" height="34" alt="" /><span
+            >RightSave</span
+          ></a
+        >
+        <nav aria-label="Main navigation">
+          <a href="support.html">How to use it</a
+          ><a href="options.html">Settings</a>
+        </nav>
+      </header>
+      <main>
+        <section class="start-intro">
+          <div>
+            <h1>A little less<br />right-clicking.</h1>
+            <p class="lead">
+              Save a photo. Collect a few references. Keep a video when the page
+              provides a direct file. Start with the basics below.
+            </p>
+            <div class="actions support-actions">
+              <button class="primary" data-guide="first">
+                Walk me through it</button
+              ><a class="secondary setup-link" href="support.html#practice"
+                >Try a practice save</a
+              >
+            </div>
+            <p class="small muted support-pending">
+              All tools are free. No account needed.
+            </p>
+          </div>
+          <div class="start-art" aria-hidden="true">
+            <img src="practice.svg" alt="" />
+            <div class="sample-menu">
+              <span>RightSave</span><strong>Save detected image…</strong
+              ><span>Choose a filename and folder</span>
+            </div>
+          </div>
+        </section>
+        <section class="settings-group">
+          <h2>Three ways to save</h2>
+          <div class="start-paths">
+            <div>
+              <strong>One file</strong>
+              <p>
+                Right-click an image or supported video. Save As lets you choose
+                where it goes.
+              </p>
+              <button class="text-button" data-guide="first">
+                Show the steps
+              </button>
+            </div>
+            <div>
+              <strong>A whole selection</strong>
+              <p>
+                Open the media library, select what you want and save it in one
+                ZIP.
+              </p>
+              <button class="text-button" data-guide="collections">
+                Make a collection
+              </button>
+            </div>
+            <div>
+              <strong>A different format</strong>
+              <p>
+                Open a larger image preview to resize it or save a PNG, JPEG or
+                WebP copy.
+              </p>
+              <button class="text-button" data-guide="convert">
+                Convert an image
+              </button>
+            </div>
+          </div>
+        </section>
+        <section class="settings-group">
+          <h2>Put it within reach</h2>
+          <p class="lead">
+            Open your browser’s Extensions menu and pin RightSave to the
+            toolbar. Refresh any pages that were already open when you installed
+            it.
+          </p>
+          <p class="small muted support-pending">
+            <kbd>Alt + Shift + S</kbd> opens the media library. Hold
+            <kbd>Shift</kbd> while right-clicking for the normal browser menu,
+            or <kbd>Alt</kbd> for the website’s controls.
+          </p>
+        </section>
+        <footer>
+          <p>
+            <a href="support.html">All guides and troubleshooting</a> ·
+            <a href="options.html">Settings</a>
+          </p>
+          <p>
+            Previews and downloads contact the original media host. RightSave
+            has no analytics or developer media uploads.
+          </p>
+        </footer>
+      </main>
+    </div>
+    <script src="compat.js"></script>
+    <script src="support.js"></script>
+  </body>
+</html>

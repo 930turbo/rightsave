@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Release review · RightSave</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        max-width: 960px;
+        margin: 50px auto;
+        padding: 0 24px;
+        background: #090c10;
+        color: #f4f6f8;
+        font: 16px/1.7 system-ui;
+      }
+      h1 {
+        font-size: clamp(38px, 6vw, 58px);
+        line-height: 1.1;
+        letter-spacing: -0.05em;
+      }
+      h2 {
+        margin-top: 36px;
+        font-size: 23px;
+      }
+      p,
+      li {
+        color: #a6b3c2;
+      }
+      a {
+        color: #c7dfeb;
+        text-underline-offset: 4px;
+      }
+      code {
+        color: #f4f6f8;
+        overflow-wrap: anywhere;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 14px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 12px;
+        border-bottom: 1px solid #303c47;
+        vertical-align: top;
+      }
+      pre {
+        white-space: pre-wrap;
+      }
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        border-bottom: 1px solid #303c47;
+        padding-bottom: 20px;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+      }
+      :focus-visible {
+        outline: 2px solid #b5d6e7;
+        outline-offset: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="https://github.com/930turbo/rightsave">RightSave</a
+      ><a href="https://github.com/930turbo/rightsave/releases/latest"
+        >Downloads</a
+      >
+    </nav>
+    <h1>Release review</h1>
+    <p>
+      RightSave 5.0.0. Reviewed October 21, 2026. This documents the checks
+      performed for this release; it is not a guarantee against every defect or
+      future website change.
+    </p>
+    <h2>Package boundaries</h2>
+    <p>
+      The browser ZIPs contain only the extension directory. Build tools,
+      fixtures, test profiles, secrets, billing modules and commercial
+      configuration are excluded. All executable scripts are local and readable.
+      The extension uses a restrictive script policy, forbids embedded objects
+      and has no externally connectable message interface.
+    </p>
+    <h2>Data handling</h2>
+    <p>
+      No developer endpoint receives scans, downloads, diagnostics or telemetry.
+      Explicit media requests go to their original hosts. Credentials embedded
+      in URLs are rejected. Remote pages cannot use saving or ZIP preparation to
+      read local files. Privileged background actions require a sender from this
+      extension. Source exports use an allowlist and strip URL credentials,
+      query strings and fragments. Clipboard writes require an explicit click.
+    </p>
+    <h2>Untrusted content</h2>
+    <p>
+      Social parsers bound input size, depth, node count and output. They never
+      evaluate page text. Inline SVG export removes active content and external
+      references. Filenames and ZIP paths reject traversal; CSV records
+      neutralize formula prefixes. Workflow imports validate every entry before
+      writing. ZIP and conversion enforce memory limits.
+    </p>
+    <h2>Verification</h2>
+    <p>
+      Automated checks exercise real Firefox and Chromium downloads, native Save
+      As requests, cancellation, byte-for-byte source matching, ZIP extraction,
+      conversion, workflows, guides, keyboard controls, responsive layouts and
+      optional-video cache cleanup. The
+      <a href="verification.json">verification report</a> records results and
+      source hashes. Firefox validation and development dependency audit are run
+      before packaging.
+    </p>
+    <h2>Practical limits</h2>
+    <p>
+      Representative platform fixtures cover Instagram, Facebook, X, Reddit,
+      Threads and LinkedIn. These do not certify every logged-in feed. Stream
+      merging and protected playback are unsupported. Existing access on the
+      source site is still required. Files and exported records remain the
+      user’s responsibility after saving. Mozilla signing and review are
+      separate from local validation.
+    </p>
+  </body>
+</html>

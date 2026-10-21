@@ -1,9 +1,35 @@
-Purpose: discover and save webpage media explicitly chosen by the user.
+RightSave 5.0.0 — reviewer notes
 
-All-site access: discover clicked media and scan arbitrary user-selected pages/frames. Menus: native submenu. Downloads: Save As. Scripting: frame scans. Storage: local preferences, licenses, saved workflows and session lists. Firefox cookies permission only passes cookieStoreId to downloads; cookie values are never read. Optional webRequest is off initially and observes video URLs/content types.
+Single purpose: discover and save webpage media explicitly chosen by the user.
+All features are free. No account, billing, activation or feature-gating modules
+are included. No remote executable code, eval, developer backend or telemetry.
+The ZIP contains readable, formatted source without a bundler or minifier.
 
-The social MAIN-world bridge has no extension privileges. It reads bounded selected same-platform response text transiently; isolated code keeps only validated media fields. No eval, remote executable code, API requests, developer backend or telemetry. User opt-out and site exceptions clear caches.
+All-site access discovers clicked media and scans user-selected pages/frames.
+Menus adds the native submenu. Downloads opens Save As. Scripting scans frames.
+Storage keeps preferences, user-saved workflows and temporary media lists.
+Firefox cookies permission only passes cookieStoreId to downloads; cookie
+values are never read. Optional webRequest starts off and observes video
+response URLs/content types after the user grants permission in Settings.
 
-This submitted package is Free, with billing unconfigured and licensed tools hidden. It makes no billing requests. No payment SDK or remote executable script is loaded. The optional license and collection modules in source are inactive in this build. Free shape, format and width filters do not require a license.
+The MAIN-world bridge has no extension privileges. It reads bounded selected
+same-platform responses already requested by the page, without extra API
+requests. Isolated code retains validated media fields, not raw responses.
+Opt-out and site exceptions clear caches. Request observations skip excluded
+sites and clear on navigation, tab closure and permission removal.
 
-Use README.md, docs/privacy.html, docs/compatibility.html and store/submission.html for details.
+Previews and saves contact original hosts. No user data is sent to the developer.
+No external credentials are needed to test the core features. The installed
+quick start and How to use it pages include an offline practice save. The
+public demo at https://930turbo.github.io/rightsave/demo/ has three sample images.
+Open the library, load previews, select files and save a ZIP to verify.
+
+The release includes natural-language limitations: direct video files only,
+no DRM bypass or HLS/DASH merging, and video-only labels for separate audio.
+Test fixtures cover representative social payloads; no universal compatibility
+claim is made. The developer does not control third-party platform changes.
+
+Build: Node.js 22+, npm ci --ignore-scripts, npm run build.
+The build copies extension/ and changes the browser-specific manifest only.
+Validation: npm test; npm run lint:firefox; npm run preflight.
+Read docs/privacy.html, docs/security.html and docs/verification.json.

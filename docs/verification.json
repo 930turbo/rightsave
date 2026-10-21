@@ -1,10 +1,37 @@
 {
-  "version": "4.0.0",
+  "version": "5.0.0",
   "edition": "free",
   "client_date": "2026-10-21",
-  "unit_checks": 67,
+  "unit_checks": 42,
   "firefox": {
+    "status": "passed",
+    "version": "5.0.0",
+    "source_sha256": {
+      "app.css": "ae9c4c4827b42912b3c01fe6708b68dec7078aa08f5f1c96176682ed867a7024",
+      "background.js": "99f44cffa702bfdf6b6fba7eeb29290f6171651056d06ed8e1702364184f023b",
+      "collections.js": "a0f8488a987bd12404490f55751e090f31fadc5ee082afb55a4eb862d011599d",
+      "compat.js": "2bb91ef260e1724967c8bd79c6e1a0fffed26ba8bd0927bc29f6bc67d86ac5c6",
+      "content.js": "384dacddfa457d6e4e47d19625ecd1253bbf89beb682ab0e69a8419bea75a3e8",
+      "gallery.js": "f611281c98c8ae78d779188e6ccb307e24833349350f036e81ac87c7cfccea8c",
+      "icon.svg": "2a545a2d301624e6436a826e742c75fa9b9774970c5be862de38bb398b0b9729",
+      "library.html": "8eb429826fc6c36b036aeb8777eb9a40f8b81875f9245c2f13c19cbc6ce4f55b",
+      "library.js": "d99dd3162ac6afe822c94fbc68a43072163b25ad380e0b7150ea176cbb6e4e6b",
+      "manifest.json": "705c9ac2ea1c67755c822c385635e1c87cf304698d7fdbc4eec249c439879edf",
+      "options.html": "132ad616df32470b6376edf81cacaeebf50fc26654d630f4934338ccc641fe23",
+      "options.js": "071cf82a988f04783c70c9df532c5119c6c7eadea91880784c2e23480b8a050d",
+      "page-bridge.js": "eb9831ab8e0a2685b5d7fe0673d56bd36af1fadef6d0edf4b5a6120bdd907b76",
+      "popup.html": "5aea4878184312e8f9ffd106d480078fac60bbd1af698d23cb4086aaea9b5e99",
+      "popup.js": "9e8d3dff31f948e90d32daab381431e85144cd8daf52a476664541d52850719a",
+      "practice.svg": "9f1cf59769d055f5337a8b2980309ccca136e4d1acea78286f30398b04cf8dd3",
+      "shared.js": "3464faac514fbe40c7beb8b9065ba551092fd7496c88be2675da74bcf7a8741c",
+      "sites.js": "15728489c5729fcd03d5d9eec1681e92e121feac8ed94c006b59cf1b960e337b",
+      "support.html": "3dec3c2bbfff7f244deec2e4975578539194756091f6f8c0b438c11c23481d2b",
+      "support.js": "3138d68272a0046fe14e4f2aa1e6f23e7cf9fc312f0e1e0883a7d32ef69c7dd2",
+      "welcome.html": "c291a6100741e89a6de862ffdb4626fbb91544756f8b0f1e15ecfcefafb221e7",
+      "worker.js": "99324c8641ba7d313aaa9448253b07d89d14fad5a42d2efe5d7acd0bfe710ad0"
+    },
     "checks": 44,
+    "firefox": "158.0.1",
     "passed": [
       "Website contextmenu and right-button handlers are blocked",
       "Native Firefox context menu contains RightSave",
@@ -50,13 +77,13 @@
       "Firefox temporary .part is present while downloading",
       "Repeated save during transfer reuses that download",
       "Slow transfer leaves one final file and no partial files"
-    ],
-    "browser": "158.0.1"
+    ]
   },
   "chromium": {
+    "status": "passed",
+    "browser": "156.0.8078.4",
     "checks": 23,
     "passed": [
-      "Free access cannot invoke a Pro background workflow",
       "Chrome content script restores blocked right-click",
       "Chrome service worker opens media library",
       "Chrome detects backgrounds, frames, canvas and images",
@@ -70,69 +97,21 @@
       "Chrome right-click directly starts one Save As operation",
       "Lazy, responsive and linked originals appear in the library",
       "SVG export saves vector markup with event handlers removed",
+      "SVG export removes external links, styles and animation while keeping local shapes",
       "Unprotected video frame exports as PNG",
       "Selected-file batch requests safe naming and subfolder templates",
       "Media manifest export is valid JSON",
-      "Licensed ZIP export packages selected files and naming rules",
+      "Free ZIP export packages selected files and naming rules",
       "Canceling archive preparation creates no partial download",
-      "Licensed workflow presets persist and restore library settings",
+      "Free workflow presets persist and restore library settings",
       "Saved workflows can be deleted",
-      "Removing a license immediately revokes protected archive access",
+      "Collection access needs no key or account",
       "Optional network detection recovers a video URL absent from the DOM"
-    ],
-    "browser": "156.0.8078.4"
-  },
-  "social_firefox": {
-    "checks": 14,
-    "passed": [
-      "First install opens the bundled quick-start page",
-      "Embedded page JSON exposes a hidden progressive video",
-      "Fetch observation leaves the site response unchanged",
-      "Main-world fetch data reaches the isolated scanner",
-      "Only extracted media fields survive observation",
-      "Right-click resolves blob playback to the matching highest-quality file",
-      "Resolved social video saves complete original bytes",
-      "XHR JSON responses are also observed",
-      "Disabling enhanced detection clears cached media",
-      "Detection resumes after re-enabling",
-      "SPA navigation clears prior-post data and skips unchanged old JSON",
-      "New-route media can be observed after navigation",
-      "Forged executable media URLs are discarded",
-      "Site exceptions clear enhanced detection on that host"
-    ],
-    "browser": "158.0.1"
-  },
-  "social_chromium": {
-    "checks": 14,
-    "passed": [
-      "First install opens the bundled quick-start page",
-      "Embedded page JSON exposes a hidden progressive video",
-      "Fetch observation leaves the site response unchanged",
-      "Main-world fetch data reaches the isolated scanner",
-      "Only extracted media fields survive observation",
-      "Right-click resolves blob playback to the matching highest-quality file",
-      "Resolved social video saves complete original bytes",
-      "XHR JSON responses are also observed",
-      "Disabling enhanced detection clears cached media",
-      "Detection resumes after re-enabling",
-      "SPA navigation clears prior-post data and skips unchanged old JSON",
-      "New-route media can be observed after navigation",
-      "Forged executable media URLs are discarded",
-      "Site exceptions clear enhanced detection on that host"
-    ],
-    "browser": "156.0.8078.4"
-  },
-  "licensed_firefox": {
-    "checks": 3,
-    "passed": [
-      "Signed test entitlement activates Firefox licensed UI",
-      "Firefox native Save As receives one valid ZIP containing original image and canvas",
-      "Firefox rejects archive access after license removal"
-    ],
-    "browser": "158.0.1"
+    ]
   },
   "ui": {
-    "checks": 36,
+    "status": "passed",
+    "checks": 38,
     "passed": [
       "Viewport is 1440px wide",
       "Dark is the default appearance",
@@ -161,6 +140,8 @@
       "Options fits a 320px window",
       "Viewport is 1440px wide",
       "Desktop support has no horizontal overflow",
+      "Viewport is 1280px wide",
+      "Viewport is 1440px wide",
       "Viewport is 320px wide",
       "Support fits a 320px window",
       "Viewport is 1440px wide",
@@ -170,96 +151,202 @@
       "Viewport is 1440px wide",
       "Explicit light appearance is preserved",
       "Popup fits its browser surface"
-    ],
-    "browser": "Chromium"
+    ]
   },
-  "collections_chromium": {
-    "checks": 13,
+  "social_firefox": {
+    "status": "passed",
+    "browser": "158.0.1",
+    "checks": 14,
     "passed": [
-      "Configured build labels its hosted upgrade checkout as a test",
-      "Receipt key activates the upgrade through the real background RPC",
-      "Customer email is discarded rather than stored",
-      "Repeated activation does not consume another provider activation",
-      "Upgrade enables collection and source-record controls",
-      "Native ZIP contains three exact photos and both source records",
-      "Source records match archive filenames and the source page",
-      "Still-image conversion and resizing produce an actual WebP locally",
-      "ZIP duplicate removal compares actual bytes across different URLs",
-      "Workflow pack saves the actual local workflow",
-      "File import restores a portable workflow without uploading it",
-      "Deactivation releases the provider instance before returning to Free",
-      "Disabled provider license removes paid access on its next check"
+      "First install opens the bundled quick-start page",
+      "Embedded page JSON exposes a hidden progressive video",
+      "Fetch observation leaves the site response unchanged",
+      "Main-world fetch data reaches the isolated scanner",
+      "Only extracted media fields survive observation",
+      "Right-click resolves blob playback to the matching highest-quality file",
+      "Resolved social video saves complete original bytes",
+      "XHR JSON responses are also observed",
+      "Disabling enhanced detection clears cached media",
+      "Detection resumes after re-enabling",
+      "SPA navigation clears prior-post data and skips unchanged old JSON",
+      "New-route media can be observed after navigation",
+      "Forged executable media URLs are discarded",
+      "Site exceptions clear enhanced detection on that host"
+    ]
+  },
+  "social_chrome": {
+    "status": "passed",
+    "browser": "156.0.8078.4",
+    "checks": 14,
+    "passed": [
+      "First install opens the bundled quick-start page",
+      "Embedded page JSON exposes a hidden progressive video",
+      "Fetch observation leaves the site response unchanged",
+      "Main-world fetch data reaches the isolated scanner",
+      "Only extracted media fields survive observation",
+      "Right-click resolves blob playback to the matching highest-quality file",
+      "Resolved social video saves complete original bytes",
+      "XHR JSON responses are also observed",
+      "Disabling enhanced detection clears cached media",
+      "Detection resumes after re-enabling",
+      "SPA navigation clears prior-post data and skips unchanged old JSON",
+      "New-route media can be observed after navigation",
+      "Forged executable media URLs are discarded",
+      "Site exceptions clear enhanced detection on that host"
+    ]
+  },
+  "gallery_firefox": {
+    "status": "passed",
+    "checks": 15,
+    "passed": [
+      "Free help contains no pricing or upgrade wall",
+      "Basic format, shape and width controls are available without a license",
+      "Portrait filter finds the actual portrait image",
+      "Square filter uses media dimensions",
+      "Format filter does not pretend PNG files are JPEG",
+      "Minimum width filtering works in Free",
+      "Reset restores the complete gallery",
+      "Copy link passes the exact selected URL to the clipboard API",
+      "Stop loading aborts an outstanding preview and restores controls",
+      "Stopped previews can be loaded again without starting a download",
+      "Expanded viewer moves to the next actual media item",
+      "Arrow keys navigate the expanded viewer",
+      "Viewer Save original requests the currently displayed source",
+      "Still-image conversion is available in the free viewer",
+      "Slash focuses the gallery search"
+    ],
+    "browser": "158.0.1"
+  },
+  "gallery_chrome": {
+    "status": "passed",
+    "checks": 15,
+    "passed": [
+      "Free help contains no pricing or upgrade wall",
+      "Basic format, shape and width controls are available without a license",
+      "Portrait filter finds the actual portrait image",
+      "Square filter uses media dimensions",
+      "Format filter does not pretend PNG files are JPEG",
+      "Minimum width filtering works in Free",
+      "Reset restores the complete gallery",
+      "Copy link passes the exact selected URL to the clipboard API",
+      "Stop loading aborts an outstanding preview and restores controls",
+      "Stopped previews can be loaded again without starting a download",
+      "Expanded viewer moves to the next actual media item",
+      "Arrow keys navigate the expanded viewer",
+      "Viewer Save original requests the currently displayed source",
+      "Still-image conversion is available in the free viewer",
+      "Slash focuses the gallery search"
     ],
     "browser": "156.0.8078.4"
   },
   "collections_firefox": {
-    "checks": 13,
+    "status": "passed",
+    "checks": 7,
     "passed": [
-      "Configured build labels its hosted upgrade checkout as a test",
-      "Receipt key activates the upgrade through the real background RPC",
-      "Customer email is discarded rather than stored",
-      "Repeated activation does not consume another provider activation",
-      "Upgrade enables collection and source-record controls",
+      "All collection controls are available without an account",
       "Native ZIP contains three exact photos and both source records",
       "Source records match archive filenames and the source page",
       "Still-image conversion and resizing produce an actual WebP locally",
       "ZIP duplicate removal compares actual bytes across different URLs",
       "Workflow pack saves the actual local workflow",
-      "File import restores a portable workflow without uploading it",
-      "Deactivation releases the provider instance before returning to Free",
-      "Disabled provider license removes paid access on its next check"
+      "File import restores a portable workflow without uploading it"
     ],
     "browser": "158.0.1"
   },
-  "gallery_chromium": {
-    "checks": 15,
+  "collections_chrome": {
+    "status": "passed",
+    "checks": 7,
     "passed": [
-      "Free help contains no pricing or upgrade wall",
-      "Basic format, shape and width controls are available without a license",
-      "Portrait filter finds the actual portrait image",
-      "Square filter uses media dimensions",
-      "Format filter does not pretend PNG files are JPEG",
-      "Minimum width filtering works in Free",
-      "Reset restores the complete gallery",
-      "Copy link passes the exact selected URL to the clipboard API",
-      "Stop loading aborts an outstanding preview and restores controls",
-      "Stopped previews can be loaded again without starting a download",
-      "Expanded viewer moves to the next actual media item",
-      "Arrow keys navigate the expanded viewer",
-      "Viewer Save original requests the currently displayed source",
-      "Viewer conversion controls remain hidden in Free",
-      "Slash focuses the gallery search"
+      "All collection controls are available without an account",
+      "Native ZIP contains three exact photos and both source records",
+      "Source records match archive filenames and the source page",
+      "Still-image conversion and resizing produce an actual WebP locally",
+      "ZIP duplicate removal compares actual bytes across different URLs",
+      "Workflow pack saves the actual local workflow",
+      "File import restores a portable workflow without uploading it"
     ],
     "browser": "156.0.8078.4"
   },
-  "gallery_firefox": {
-    "checks": 15,
+  "help_firefox": {
+    "status": "passed",
+    "checks": 22,
     "passed": [
-      "Free help contains no pricing or upgrade wall",
-      "Basic format, shape and width controls are available without a license",
-      "Portrait filter finds the actual portrait image",
-      "Square filter uses media dimensions",
-      "Format filter does not pretend PNG files are JPEG",
-      "Minimum width filtering works in Free",
-      "Reset restores the complete gallery",
-      "Copy link passes the exact selected URL to the clipboard API",
-      "Stop loading aborts an outstanding preview and restores controls",
-      "Stopped previews can be loaded again without starting a download",
-      "Expanded viewer moves to the next actual media item",
-      "Arrow keys navigate the expanded viewer",
-      "Viewer Save original requests the currently displayed source",
-      "Viewer conversion controls remain hidden in Free",
-      "Slash focuses the gallery search"
+      "Help loads locally without an account or checkout",
+      "first guide starts with an accessible title and first step",
+      "first guide reaches its final actionable step",
+      "collections guide starts with an accessible title and first step",
+      "collections guide reaches its final actionable step",
+      "video guide starts with an accessible title and first step",
+      "video guide reaches its final actionable step",
+      "convert guide starts with an accessible title and first step",
+      "convert guide reaches its final actionable step",
+      "workflows guide starts with an accessible title and first step",
+      "workflows guide reaches its final actionable step",
+      "Help search gives an actionable empty state",
+      "Help search narrows guides",
+      "Diagnostics include versions and settings but omit private local fields",
+      "Practice save requests native Save As and writes the bundled drawing",
+      "Selecting a file reveals the collection dock",
+      "Invert selection changes one of three files into the other two",
+      "Clear removes the selection and hides its dock",
+      "A dismissed library tip stays dismissed on this browser",
+      "Stop after this file prevents subsequent Save As requests",
+      "Closing the library removes its stored source list",
+      "Clear lists discards scans while retaining preferences"
     ],
     "browser": "158.0.1"
   },
-  "total_checks": 257,
-  "web_ext_lint": {
+  "help_chrome": {
+    "status": "passed",
+    "checks": 22,
+    "passed": [
+      "Help loads locally without an account or checkout",
+      "first guide starts with an accessible title and first step",
+      "first guide reaches its final actionable step",
+      "collections guide starts with an accessible title and first step",
+      "collections guide reaches its final actionable step",
+      "video guide starts with an accessible title and first step",
+      "video guide reaches its final actionable step",
+      "convert guide starts with an accessible title and first step",
+      "convert guide reaches its final actionable step",
+      "workflows guide starts with an accessible title and first step",
+      "workflows guide reaches its final actionable step",
+      "Help search gives an actionable empty state",
+      "Help search narrows guides",
+      "Diagnostics include versions and settings but omit private local fields",
+      "Practice save requests native Save As and writes the bundled drawing",
+      "Selecting a file reveals the collection dock",
+      "Invert selection changes one of three files into the other two",
+      "Clear removes the selection and hides its dock",
+      "A dismissed library tip stays dismissed on this browser",
+      "Stop after this file prevents subsequent Save As requests",
+      "Closing the library removes its stored source list",
+      "Clear lists discards scans while retaining preferences"
+    ],
+    "browser": "156.0.8078.4"
+  },
+  "total_checks": 263,
+  "firefox_validation": {
     "errors": 0,
     "warnings": 0,
     "notices": 0
   },
-  "store_preflight": "passed: both default packages are Free, billing is off, listing and graphics present",
-  "store_status": "Prepared for submission. Publisher registration and uploads follow separately; no store publication claimed.",
-  "scope": "Disposable Firefox and Chromium profiles with local media and synthetic social payloads. Tests automate native destinations while checking Save As is requested. Clipboard writes are captured by a fixture. Licensed conversion, byte-level deduplication and provider lifecycle use ephemeral or deterministic test entitlements. No real merchant payment, store review or every live logged-in feed is certified."
+  "dependency_audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "release_status": {
+    "local_packages": "prepared",
+    "firefox_store": "requires owner registration, signing and Mozilla review",
+    "chrome_store": "requires owner registration and store review"
+  },
+  "limits": [
+    "Representative social-site fixtures do not certify every live logged-in feed.",
+    "Direct video files only; no protected playback bypass or stream merging.",
+    "No independent penetration-test or absolute security guarantee."
+  ]
 }

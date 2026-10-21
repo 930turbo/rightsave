@@ -1,6 +1,219 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Store submission · RightSave Free</title><style>body{max-width:900px;margin:50px auto;padding:0 24px;background:#080a0d;color:#f4f6f8;font:16px/1.7 system-ui}h1{font-size:48px;letter-spacing:-2px}h2{margin-top:36px}p,li{color:#94a1b3}a{color:#a6c6e4}code{color:#fff}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:12px;border-bottom:1px solid #2a3039}</style></head><body><a href="https://github.com/930turbo/rightsave">RightSave Free</a><h1>Ready for store review.</h1><p>The packages are prepared for submission. This page is not a claim that either store has approved or published RightSave.</p><table><tr><th>Field</th><th>Value</th></tr><tr><td>Name</td><td>RightSave</td></tr><tr><td>Version</td><td>4.0.0</td></tr><tr><td>Short description</td><td>Save images and direct videos with right-click, large previews and useful filters.</td></tr><tr><td>Privacy</td><td><a href="https://930turbo.github.io/rightsave/privacy.html">https://930turbo.github.io/rightsave/privacy.html</a></td></tr><tr><td>Support</td><td><a href="https://github.com/930turbo/rightsave/issues">GitHub Issues</a></td></tr><tr><td>Single purpose</td><td>Discover and save media explicitly chosen by the user on webpages.</td></tr><tr><td>Price and data</td><td>Free package; no advertising, analytics, billing requests or developer media uploads.</td></tr></table><h2>Chrome Web Store</h2><ol><li>Create the publisher account in the <a href="https://chrome.google.com/webstore/devconsole/">Developer Dashboard</a>. The owner must complete registration, any identity checks and the one-time registration payment. Do not use a substitute publisher account.</li><li>Upload <code>RightSave-4.0.0-chrome.zip</code> as a new item. Use <code>listing.txt</code> for the description and <code>review-notes.txt</code> for permission explanations.</li><li>Upload the 128-pixel icon and both 1280 × 800 screenshots from <code>assets/</code>. The promo tile and marquee are also included. Select the appropriate photo/productivity category.</li><li>Declare the actual package’s privacy practices: media is processed locally and fetched from original hosts; the Free build has no developer data collection or remote executable code. Explain all-site access as necessary for finding media on arbitrary user-selected webpages.</li><li>Enter the owner’s real support and publisher details. Complete any trader or distribution declarations directly. Submit for review when the dashboard’s required fields are complete. A successful upload is not approval.</li></ol><h2>Firefox Add-ons</h2><ol><li>Create or sign into the <a href="https://addons.mozilla.org/developers/">Mozilla Add-ons Developer Hub</a>. The owner must accept Mozilla’s distribution terms and complete any account requirements.</li><li>Choose an add-on distributed <strong>on this site</strong>, then upload <code>RightSave-4.0.0-firefox.zip</code>. Keep the existing add-on ID from the manifest. Choose the public/listed route for a store listing.</li><li>Use the listing, privacy URL, review notes, screenshots and real publisher/support details. Source is unminified; the build copies local files and applies browser-specific manifest changes.</li><li>Submit for validation, signing and review. Only a signed XPI confirms a permanent-installable Firefox package; only the published AMO listing confirms store availability.</li></ol><p>If API credentials are available locally, <code>npm run sign:firefox</code> uses them without printing or packaging them. Set <code>RIGHTSAVE_AMO_CHANNEL=listed</code> for public distribution. New submissions may require additional metadata through the Developer Hub.</p><h2>Checks before upload</h2><pre>npm ci
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Store submission · RightSave Free</title>
+    <style>
+      body {
+        max-width: 900px;
+        margin: 50px auto;
+        padding: 0 24px;
+        background: #080a0d;
+        color: #f4f6f8;
+        font: 16px/1.7 system-ui;
+      }
+      h1 {
+        font-size: 48px;
+        letter-spacing: -2px;
+      }
+      h2 {
+        margin-top: 36px;
+      }
+      p,
+      li {
+        color: #94a1b3;
+      }
+      a {
+        color: #a6c6e4;
+      }
+      code {
+        color: #fff;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 12px;
+        border-bottom: 1px solid #2a3039;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="https://github.com/930turbo/rightsave">RightSave Free</a>
+    <h1>Ready for store review.</h1>
+    <p>
+      The packages are prepared for submission. This page is not a claim that
+      either store has approved or published RightSave.
+    </p>
+    <table>
+      <tr>
+        <th>Field</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td>Name</td>
+        <td>RightSave – Save Images &amp; Videos</td>
+      </tr>
+      <tr>
+        <td>Version</td>
+        <td>5.0.0</td>
+      </tr>
+      <tr>
+        <td>Short description</td>
+        <td>
+          Save images and direct videos with right-click, large previews and
+          useful filters.
+        </td>
+      </tr>
+      <tr>
+        <td>Privacy</td>
+        <td>
+          <a href="https://930turbo.github.io/rightsave/privacy.html"
+            >https://930turbo.github.io/rightsave/privacy.html</a
+          >
+        </td>
+      </tr>
+      <tr>
+        <td>Support</td>
+        <td>
+          <a href="https://github.com/930turbo/rightsave/issues"
+            >GitHub Issues</a
+          >
+        </td>
+      </tr>
+      <tr>
+        <td>Single purpose</td>
+        <td>
+          Discover and save media explicitly chosen by the user on webpages.
+        </td>
+      </tr>
+      <tr>
+        <td>Price and data</td>
+        <td>
+          Free package; no advertising, analytics, billing requests or developer
+          media uploads.
+        </td>
+      </tr>
+    </table>
+    <h2>Chrome Web Store</h2>
+    <ol>
+      <li>
+        Create the publisher account in the
+        <a href="https://chrome.google.com/webstore/devconsole/"
+          >Developer Dashboard</a
+        >. The owner must complete registration, any identity checks and the
+        one-time registration payment.
+      </li>
+      <li>
+        Upload <code>RightSave-5.0.0-chrome.zip</code> as a new item. Use
+        <code>listing.txt</code> for the description and
+        <code>review-notes.txt</code> for permission explanations.
+      </li>
+      <li>
+        Upload the 128-pixel icon and the gallery, collections and help
+        screenshots (1280 × 800) from <code>assets/</code>. The promo tile and
+        marquee are also included. Select the appropriate photo/productivity
+        category.
+      </li>
+      <li>
+        Declare the actual package’s privacy practices: media is processed
+        locally and fetched from original hosts; the Free build has no developer
+        data collection or remote executable code. Explain all-site access as
+        necessary for finding media on arbitrary user-selected webpages.
+      </li>
+      <li>
+        Enter the owner’s real support and publisher details. Complete any
+        trader or distribution declarations directly. Submit for review when the
+        dashboard’s required fields are complete. A successful upload is not
+        approval.
+      </li>
+    </ol>
+    <h2>Make your Firefox developer account</h2>
+    <ol>
+      <li>
+        Open
+        <a href="https://addons.mozilla.org/developers/"
+          >Mozilla Add-ons Developer Hub</a
+        >
+        in Firefox. Choose Register if you have no Mozilla Account, or Log in if
+        you already have one.
+      </li>
+      <li>
+        Use your own email address, complete Mozilla’s email verification and
+        account security steps, then sign into Add-ons with that account.
+      </li>
+      <li>
+        Complete your publisher profile and accept the developer agreement
+        yourself. Use accurate publisher and support details.
+      </li>
+    </ol>
+    <h2>Publish on Firefox Add-ons</h2>
+    <ol>
+      <li>
+        Create or sign into the
+        <a href="https://addons.mozilla.org/developers/"
+          >Mozilla Add-ons Developer Hub</a
+        >. The owner must accept Mozilla’s distribution terms and complete any
+        account requirements.
+      </li>
+      <li>
+        Choose an add-on distributed <strong>on this site</strong>, then upload
+        <code>RightSave-5.0.0-firefox.zip</code>. Keep the existing add-on ID
+        from the manifest. Choose the public/listed route for a store listing.
+      </li>
+      <li>
+        Use listing.txt for the descriptive name, summary, description, tags and
+        screenshot captions. Enter the privacy URL, reviewer notes and your real
+        publisher/support details. Source is unminified; the build copies local
+        files and applies browser-specific manifest changes.
+      </li>
+      <li>
+        Submit for validation, signing and review. Only a signed XPI confirms a
+        permanent-installable Firefox package; only the published AMO listing
+        confirms store availability.
+      </li>
+    </ol>
+    <h2>Help people find it</h2>
+    <p>
+      Use the prepared descriptive title and natural phrases such as save
+      images, video downloader, right-click and ZIP collections where they
+      explain actual features. Put the gallery screenshot first, followed by
+      collection saving and help. Use accurate categories and the supplied
+      privacy and support links. Avoid keyword repetition, guaranteed rankings,
+      platform-affiliation claims or claims that all videos work. Publish a
+      store link on the project homepage only after Mozilla provides the real
+      listing URL.
+    </p>
+    <p>
+      Based on Mozilla’s
+      <a
+        href="https://extensionworkshop.com/documentation/develop/create-an-appealing-listing/"
+        >listing guidance</a
+      >
+      and
+      <a
+        href="https://extensionworkshop.com/documentation/publish/submitting-an-add-on/"
+        >submission instructions</a
+      >.
+    </p>
+    <h2>Checks before upload</h2>
+    <pre>
+npm ci
 npm run build
 npm test
 npm run lint:firefox
 python scripts/package.py
-node scripts/store-preflight.mjs</pre><p>Verify the public privacy page is reachable, and use the extension ZIP for the correct browser. The store-materials ZIP contains documents and screenshots; it is not installable. Keep store status as pending until the actual dashboard confirms submission or publication.</p></body></html>
+node scripts/store-preflight.mjs</pre
+    >
+    <p>
+      Verify the public privacy page is reachable, and use the extension ZIP for
+      the correct browser. The store-materials ZIP contains documents and
+      screenshots; it is not installable. Keep store status as pending until the
+      actual dashboard confirms submission or publication.
+    </p>
+  </body>
+</html>

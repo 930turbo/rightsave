@@ -1,18 +1,40 @@
-RightSave
+FIREFOX LISTING
 
-Save images and direct videos with right-click, large previews and useful filters.
+Name: RightSave – Save Images & Videos
+Suggested slug: rightsave
+Summary: Save images and direct videos with right-click. Browse large previews, collect files in a ZIP, and resize images locally. Free, with no account.
+Suggested category: Photos, Music & Videos. Add Other only if appropriate in the current dashboard.
+Suggested tags (choose available matching tags): image downloader, video downloader, download, photos, productivity
 
-RightSave Free gives you a proper Save As for media on webpages. Choose the filename and folder every time. When a site blocks right-click or puts an overlay in the way, RightSave looks for the media underneath.
+Description:
+Save an image without digging through a page. RightSave opens Save As when you right-click a photo or supported video, so you can choose its filename and folder. It also restores blocked right-click menus and finds media underneath overlays.
 
-Open the media gallery to browse large previews, load them all or stop loading, search filenames and links, and filter by format, shape or minimum width. Group known X image size variants, copy a media URL, or open a larger preview and browse with the arrow keys. Individual saves are unlimited and no account is needed.
+Use the media library when you want more than one file:
+• Browse large previews, search filenames and filter by format, shape or size.
+• Select files and save them together in one ZIP, with optional source records.
+• Skip identical files by comparing their actual bytes.
+• Save a PNG, JPEG or WebP copy and resize it on your device.
+• Remember filters and filename templates in saved workflows.
+• Follow short how-to guides and try a practice save inside the extension.
 
-Supports ordinary images, lazy-loaded media, CSS backgrounds, accessible frames, canvas and SVG, direct MP4/WebM files, and frame capture from unprotected videos. Enhanced detection reads media details already loaded by supported Instagram, Facebook, X, Reddit, Threads and LinkedIn pages. Open the post, scroll the carousel or play the video before rescanning.
+RightSave finds regular and lazy-loaded images, CSS backgrounds, accessible frames, canvas and SVG. It saves direct MP4, WebM and Ogg video files and can capture a frame from an unprotected video. Enhanced detection reads media details already loaded by supported Instagram, Facebook, X, Reddit, Threads and LinkedIn pages. Open the post, scroll its carousel or play its video, then rescan.
 
-Right-click Save As can be turned off to use the normal browser submenu. Hold Shift while right-clicking for the browser menu, or Alt for website controls. Site exceptions are available in Settings. Dark, light and system appearance are supported.
+Every tool is free. There is no account, paywall, advertising or analytics. Processing stays on your device; previews and downloads contact the original media hosts. The developer does not receive your files or browsing history.
 
-Protected playback and segmented video streams cannot be combined. Video tracks without their separate audio are clearly labeled. Some media requires a login, signed links can expire, and site changes may affect detection.
+A few limits: segmented streams and protected playback cannot be combined. Video-only tracks are labeled when their audio is separate. Some media requires a login or has links that expire. Site changes can affect detection. ZIP supports up to 100 files, 40 MB per file and 150 MB total. Use individual saves for Firefox container sessions.
 
-Media is processed locally. Previews and saves contact the original media hosts. No analytics, advertising, developer media uploads or billing requests are active in this Free package.
+Turn direct right-click saving off to use the RightSave submenu. Hold Shift while right-clicking for the browser menu, or Alt for website controls. Alt + Shift + S opens the library.
 
 Privacy: https://930turbo.github.io/rightsave/privacy.html
 Support: https://github.com/930turbo/rightsave/issues
+Homepage: https://930turbo.github.io/rightsave/
+
+Screenshot captions, in order:
+1. Browse a page’s images and videos with large previews and useful filters.
+2. Select a collection and save it in one ZIP.
+3. Short guides and a practice image help you get started.
+
+CHROME SHORT DESCRIPTION (under 132 characters)
+Save images and direct videos with right-click, large previews, ZIP collections and local image conversion.
+
+Use the same factual long description for Chrome. Choose a relevant current category; do not claim universal video support or affiliation with listed platforms.

@@ -4,19 +4,29 @@
 
 Find a photo you want to keep. Right-click it, choose a folder, and save it.
 
-RightSave restores blocked right-click menus and looks through overlays for the media underneath. Open the gallery when you want a better look at everything on the page. Individual saves are unlimited, and you don’t need an account.
+RightSave restores blocked right-click menus and looks through overlays for the media underneath. Open the gallery when you want a better look at everything on the page. Every tool is free, and you don’t need an account.
 
 [Download for Firefox or Chrome](https://github.com/930turbo/rightsave/releases/latest) · [Install](#install) · [Report a problem](https://github.com/930turbo/rightsave/issues)
 
 ![RightSave’s gallery with large photographic previews](docs/library.png)
 
-## A gallery that gets out of the way
+## See what you’re saving
 
 Load the previews you need, or load the whole page’s gallery at once. Stop loading whenever you like. Search by name or link, then narrow things down by format, shape or minimum width. Known unsigned X image size variants can be grouped without changing the chosen original URL.
 
 Click a loaded image for a larger view. Use the arrow keys to browse, or save the original from there. There’s also a Copy link button on each file. Press `/` to jump to search.
 
 RightSave finds regular and lazy-loaded images, CSS backgrounds, accessible frames, canvas and SVG. It can capture the current frame of an unprotected video and save direct MP4/WebM files.
+
+## Save a collection
+
+Select the files you want, then save them in one ZIP. RightSave can skip identical files by comparing their bytes and add CSV and JSON source records if you need them. Batch naming keeps filenames consistent; saved workflows remember your filters and naming rules.
+
+Open an image’s larger preview to resize it or save a PNG, JPEG or WebP copy. Everything runs on your device. ZIPs support up to 100 files, 40 MB per file and 150 MB total. Use individual saves for Firefox container sessions.
+
+![RightSave’s how-to guides and practice save](store/assets/help-1280x800.png)
+
+New to extensions? The quick start includes short walkthroughs and a bundled practice image. There’s help for finding videos, making a ZIP and troubleshooting a failed save.
 
 ### On social sites
 
@@ -28,10 +38,10 @@ Sites change, and some videos aren’t delivered as a single file. Protected pla
 
 Get your browser’s ZIP from [Releases](https://github.com/930turbo/rightsave/releases/latest). The packages here are for local installation. Store submissions are being prepared; a store listing is only live once its link is published here.
 
-| Firefox | Chrome |
-| --- | --- |
+| Firefox                                                                                                      | Chrome                                                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Open `about:debugging#/runtime/this-firefox`, choose **Load Temporary Add-on…**, and select the Firefox ZIP. | Extract the Chrome ZIP into a folder you’ll keep. Open `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select that folder. |
-| Temporary add-ons stay until Firefox restarts. Permanent installation requires Mozilla signing. | Pin RightSave from the Extensions menu so it’s easy to reach. |
+| Temporary add-ons stay until Firefox restarts. Permanent installation requires Mozilla signing.              | Pin RightSave from the Extensions menu so it’s easy to reach.                                                                                              |
 
 Remove an older temporary installation first. Refresh open webpages after installing or updating.
 
@@ -46,11 +56,11 @@ That’s the browser’s temporary download file. It becomes the finished file w
 
 ## Local by design
 
-This repository and its downloads are the Free edition. They don’t make billing requests, load remote scripts or send your media to a developer server. Preferences stay on your device; page scans are temporary. Previews and downloads contact the original media hosts.
+This repository and its downloads are the Free edition. They contain no checkout, activation or paywall code. They don’t load remote scripts or send your media to a developer server. Preferences stay on your device; page scans are temporary. Previews and downloads contact the original media hosts.
 
 ![The Free edition’s expanded image viewer](docs/viewer.png)
 
-[Privacy notice](https://930turbo.github.io/rightsave/privacy.html) · [Support](https://github.com/930turbo/rightsave/issues)
+[Privacy notice](https://930turbo.github.io/rightsave/privacy.html) · [Release review](docs/security.html) · [Support](https://github.com/930turbo/rightsave/issues)
 
 <details>
 <summary>Build and verify</summary>
@@ -75,6 +85,10 @@ python tests/integration_social.py --browser firefox
 python tests/integration_social.py --browser chrome
 python tests/integration_gallery.py --browser firefox
 python tests/integration_gallery.py --browser chrome
+python tests/integration_collections.py --browser firefox
+python tests/integration_collections.py --browser chrome
+python tests/integration_help.py --browser firefox
+python tests/integration_help.py --browser chrome
 ```
 
 Set `FIREFOX_BINARY` or `CHROMIUM_BINARY` if needed. Chrome for Testing supports extension-loading flags. Automated checks cover representative fixtures, not every live logged-in feed. [Latest verification](docs/verification.json).
@@ -85,4 +99,4 @@ Set `FIREFOX_BINARY` or `CHROMIUM_BINARY` if needed. Chrome for Testing supports
 
 Found a bug? Include your browser version, the site and what happened in an [issue](https://github.com/930turbo/rightsave/issues). Keep private media, cookies and signed links out of public reports.
 
-Copyright © 2026 930turbo. Free local use is permitted under [LICENSE](LICENSE); other rights are reserved.
+Copyright © 2026 Gianni. Free local use is permitted under [LICENSE](LICENSE); other rights are reserved.
