@@ -159,6 +159,19 @@ globalThis.RightSaveUtil = (() => {
       2,
     );
   }
+  function videoPreviewURL(item, pageURL) {
+    if (
+      !item ||
+      item.kind !== "video" ||
+      typeof item.url !== "string" ||
+      issue(item)
+    )
+      return null;
+    const url = usableURL(item.url);
+    if (url?.startsWith("file:") && !String(pageURL || "").startsWith("file:"))
+      return null;
+    return url;
+  }
   return {
     usableURL,
     issue,
@@ -167,5 +180,6 @@ globalThis.RightSaveUtil = (() => {
     templatedFilename,
     publicURL,
     mediaList,
+    videoPreviewURL,
   };
 })();

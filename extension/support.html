@@ -81,6 +81,11 @@
               through carousels, then rescan. Instagram, Facebook, X, Reddit,
               Threads and LinkedIn can expose different files after playback.
             </p>
+            <p>
+              In the library, choose Videos. Click a loaded preview, then Play
+              video preview to watch before saving the original.
+            </p>
+            <a href="#practice-video" class="text-link">Try the sample video</a>
             <button class="text-button" data-guide="video">
               Find the video file
             </button>
@@ -175,6 +180,39 @@
               height="400"
               alt="A simple mountain and lake drawing for practicing a save"
             />
+          </section>
+          <section
+            class="help-article practice-panel"
+            id="practice-video"
+            data-help
+          >
+            <div>
+              <h2>Try a video save</h2>
+              <p>
+                This four-second clip has a picture and a quiet tone. Play it
+                here, then choose Save practice video to try Save As. The sample
+                is bundled and works offline.
+              </p>
+              <button id="practice-video-save" class="primary">
+                Save practice video
+              </button>
+              <p
+                id="practice-video-status"
+                class="status"
+                role="status"
+                aria-live="polite"
+              ></p>
+            </div>
+            <video
+              id="practice-video-player"
+              controls
+              playsinline
+              preload="none"
+              poster="practice-video-poster.png"
+              aria-label="Four-second mountain-lake practice video"
+            >
+              <source src="practice.webm" type="video/webm" />
+            </video>
           </section>
         </div>
         <p id="help-empty" class="empty" hidden>

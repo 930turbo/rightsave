@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "RightSave",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Save images and direct videos with right-click, large previews, ZIP collections and local image conversion.",
   "browser_specific_settings": {
     "gecko": {

@@ -277,6 +277,7 @@
       add(element.href.baseVal, "image", "SVG image");
     if (tag === "video") {
       const selected = element.currentSrc || element.src;
+      const label = element.getAttribute("aria-label") || element.title || "";
       const sources = [...element.querySelectorAll("source[src]")];
       if (selected)
         add(
@@ -284,9 +285,10 @@
           "video",
           "Video",
           sources.find((source) => source.src === selected)?.type || "",
+          label,
         );
       for (const source of element.querySelectorAll("source[src]"))
-        add(source.src, "video", "Video source", source.type);
+        add(source.src, "video", "Video source", source.type, label);
       if (!items.length)
         items.push({
           ...common,

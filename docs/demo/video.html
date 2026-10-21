@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Try saving a video · RightSave</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        background: #090c10;
+        color: #f4f6f8;
+        font: 16px/1.6 system-ui;
+        margin: 40px auto;
+        padding: 0 24px;
+        max-width: 1100px;
+      }
+      h1 {
+        font-size: 48px;
+        line-height: 1.1;
+        letter-spacing: -0.04em;
+      }
+      p {
+        max-width: 70ch;
+        color: #a6b3c2;
+      }
+      section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+      video {
+        width: 100%;
+        border-radius: 8px;
+      }
+      figure {
+        margin: 0;
+      }
+      figcaption {
+        margin: 12px 0;
+      }
+      a {
+        color: inherit;
+      }
+      @media (max-width: 650px) {
+        section {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="../">RightSave</a>
+    <h1>Try saving a video.</h1>
+    <p>
+      These original four-second samples have a picture and a quiet tone. Play
+      one, then right-click it with RightSave or open the media library and
+      choose Videos. Save As lets you pick its filename and folder.
+    </p>
+    <section>
+      <figure>
+        <video
+          id="sample-mp4"
+          src="rightsave-demo.mp4"
+          poster="video-poster.png"
+          controls
+          playsinline
+          preload="metadata"
+          aria-label="Mountain lake MP4 with sound"
+        ></video>
+        <figcaption>
+          MP4 with sound <a href="rightsave-demo.mp4">Open original</a>
+        </figcaption>
+      </figure>
+      <figure>
+        <video
+          id="sample-webm"
+          src="rightsave-demo.webm"
+          poster="video-poster.png"
+          controls
+          playsinline
+          preload="metadata"
+          aria-label="Mountain lake WebM with sound"
+        ></video>
+        <figcaption>
+          WebM with sound <a href="rightsave-demo.webm">Open original</a>
+        </figcaption>
+      </figure>
+    </section>
+    <p>
+      RightSave saves direct video files. Protected playback and segmented
+      streams are not combined.
+      <a href="https://github.com/930turbo/rightsave"
+        >Downloads and instructions</a
+      >
+    </p>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-RightSave 5.0.0 — reviewer notes
+RightSave 5.1.0 — reviewer notes
 
 Single purpose: discover and save webpage media explicitly chosen by the user.
 All features are free. No account, billing, activation or feature-gating modules
@@ -20,7 +20,7 @@ sites and clear on navigation, tab closure and permission removal.
 
 Previews and saves contact original hosts. No user data is sent to the developer.
 No external credentials are needed to test the core features. The installed
-quick start and How to use it pages include an offline practice save. The
+quick start and How to use it pages include an offline practice image and four-second video save. Video previews load only after an explicit Play click and stop when the viewer closes or changes media. The
 public demo at https://930turbo.github.io/rightsave/demo/ has three sample images.
 Open the library, load previews, select files and save a ZIP to verify.
 

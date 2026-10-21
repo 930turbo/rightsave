@@ -17,6 +17,38 @@ const context = vm.createContext({
 });
 vm.runInContext(shared, context);
 const U = context.RightSaveUtil;
+
+test("Video preview preserves direct URLs and enforces source boundaries", () => {
+  const signed = "https://media.test/video.mp4?signature=keep";
+  assert.equal(
+    U.videoPreviewURL({ kind: "video", url: signed }, "https://page.test"),
+    signed,
+  );
+  assert.equal(
+    U.videoPreviewURL(
+      { kind: "video", url: "file:///private/movie.mp4" },
+      "https://page.test",
+    ),
+    null,
+  );
+  assert.equal(
+    U.videoPreviewURL(
+      { kind: "video", url: "file:///local/movie.mp4" },
+      "file:///local/index.html",
+    ),
+    "file:///local/movie.mp4",
+  );
+  for (const url of [
+    "https://name:secret@media.test/video.mp4",
+    "https://media.test/playlist.m3u8",
+    "blob:media.test/id",
+    "javascript:alert(1)",
+  ])
+    assert.equal(
+      U.videoPreviewURL({ kind: "video", url }, "https://page.test"),
+      null,
+    );
+});
 test("Only downloadable URL schemes are accepted", () => {
   assert.equal(U.usableURL("javascript:alert(1)"), null);
   assert.equal(U.usableURL("", "https://example.org"), null);

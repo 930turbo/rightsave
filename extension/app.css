@@ -692,6 +692,8 @@ dialog::backdrop {
   margin-top: 5px;
 }
 .viewer-stage {
+  position: relative;
+  flex-direction: column;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1422,5 +1424,55 @@ body:has(.selection-dock:not([hidden])) footer {
   .selection-dock .secondary {
     font-size: 11px;
     padding: 8px 10px;
+  }
+}
+
+#zoom-video {
+  display: block;
+  width: 100%;
+  max-height: 64vh;
+  background: #000;
+  border-radius: 10px;
+}
+#zoom-play {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  white-space: nowrap;
+}
+.viewer-stage #zoom-status:empty {
+  display: none;
+}
+.practice-panel video {
+  width: 100%;
+  height: auto;
+  max-height: 340px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.video-intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.video-intro p {
+  max-width: 65ch;
+  margin-top: 12px;
+  color: var(--muted);
+}
+.video-intro .actions {
+  flex-shrink: 0;
+}
+@media (max-width: 700px) {
+  .video-intro {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  #zoom-video {
+    max-height: 57vh;
   }
 }

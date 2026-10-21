@@ -11,6 +11,7 @@ Save an image without digging through a page. RightSave opens Save As when you r
 
 Use the media library when you want more than one file:
 • Browse large previews, search filenames and filter by format, shape or size.
+• Watch direct video previews with playback controls, then save the original file.
 • Select files and save them together in one ZIP, with optional source records.
 • Skip identical files by comparing their actual bytes.
 • Save a PNG, JPEG or WebP copy and resize it on your device.
@@ -32,7 +33,8 @@ Homepage: https://930turbo.github.io/rightsave/
 Screenshot captions, in order:
 1. Browse a page’s images and videos with large previews and useful filters.
 2. Select a collection and save it in one ZIP.
-3. Short guides and a practice image help you get started.
+3. Play a direct video preview, then save the original with its included sound.
+4. Short guides and practice media help you get started.
 
 CHROME SHORT DESCRIPTION (under 132 characters)
 Save images and direct videos with right-click, large previews, ZIP collections and local image conversion.

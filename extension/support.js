@@ -59,7 +59,7 @@
         ],
         [
           "Scan again",
-          "Open the media library, choose Videos and Rescan page. A direct video file can be saved; a player URL alone may not be enough.",
+          "Open the media library, choose Videos and Rescan page. Click a loaded preview and Play video preview to watch, or Save video to choose a filename and folder. A player URL alone may not expose the file.",
         ],
         [
           "Try optional video detection",
@@ -183,23 +183,23 @@
       });
       $("help-empty").hidden = found > 0;
     };
-  if ($("practice-save"))
-    $("practice-save").onclick = async () => {
-      $("practice-save").disabled = true;
+  function practiceSave(buttonId, statusId, file, filename, label) {
+    if (!$(buttonId)) return;
+    $(buttonId).onclick = async () => {
+      $(buttonId).disabled = true;
       let url = "";
       try {
-        const blob = await (
-          await fetch(browser.runtime.getURL("practice.svg"))
-        ).blob();
-        url = URL.createObjectURL(blob);
+        const response = await fetch(browser.runtime.getURL(file));
+        if (!response.ok) throw new Error("Missing practice file");
+        url = URL.createObjectURL(await response.blob());
         const id = await browser.downloads.download({
           url,
-          filename: "rightsave-practice.svg",
+          filename,
           saveAs: true,
           conflictAction: "uniquify",
         });
-        $("practice-status").textContent =
-          "Practice image sent to Downloads. You can choose any folder.";
+        $(statusId).textContent =
+          `Practice ${label} sent to Downloads. You can choose any folder.`;
         const owned = url;
         url = "";
         const release = (delta) => {
@@ -216,14 +216,29 @@
         if (saved && saved.state !== "in_progress")
           release({ id, state: { current: saved.state } });
       } catch (error) {
-        $("practice-status").textContent = /cancel/i.test(error.message)
+        $(statusId).textContent = /cancel/i.test(error.message)
           ? "Practice save canceled. Try again whenever you like."
-          : "The file dialog could not open. Try the browser’s image menu by right-clicking the drawing.";
+          : "The file dialog could not open. Reopen this page and try again.";
       } finally {
         if (url) URL.revokeObjectURL(url);
-        $("practice-save").disabled = false;
+        $(buttonId).disabled = false;
       }
     };
+  }
+  practiceSave(
+    "practice-save",
+    "practice-status",
+    "practice.svg",
+    "rightsave-practice.svg",
+    "image",
+  );
+  practiceSave(
+    "practice-video-save",
+    "practice-video-status",
+    "practice.webm",
+    "rightsave-practice-video.webm",
+    "video",
+  );
   if ($("diagnostics"))
     $("diagnostics").onclick = async () => {
       const current = await browser.storage.local.get({

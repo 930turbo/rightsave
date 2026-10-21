@@ -35,7 +35,8 @@
     busy = false,
     previewController,
     zoomItem,
-    zoomEpoch = 0;
+    zoomEpoch = 0,
+    zoomPlaybackStarted = false;
   const selected = new Set(),
     previews = new Map(),
     rows = new Map();
@@ -256,6 +257,13 @@
         frame.textContent = "Save frame";
         frame.onclick = () => act("video-frame", frame);
         actions.append(frame);
+      }
+      if (U.videoPreviewURL(item, data.pageURL)) {
+        const play = document.createElement("button");
+        play.className = "text-button video-preview";
+        play.textContent = "Preview video";
+        play.onclick = () => openZoom(item);
+        actions.append(play);
       }
       if (/^(https?:|file:)/.test(item.url)) {
         const link = document.createElement("a");
@@ -710,29 +718,75 @@
       $("pack-file").value = "";
     }
   };
+  function stopVideo() {
+    const video = $("zoom-video");
+    video.onplaying = null;
+    video.onerror = null;
+    video.pause();
+    video.removeAttribute("src");
+    video.removeAttribute("poster");
+    video.load();
+    video.hidden = true;
+  }
+  $("zoom-play").onclick = async () => {
+    const item = zoomItem,
+      epoch = zoomEpoch;
+    if (!U.videoPreviewURL(item, data.pageURL)) return;
+    zoomPlaybackStarted = true;
+    const video = $("zoom-video");
+    $("zoom-play").hidden = true;
+    $("zoom-image").hidden = true;
+    video.hidden = false;
+    $("zoom-status").textContent = "Loading video…";
+    const failed = () => {
+      if (epoch !== zoomEpoch || !$("zoom").open) return;
+      stopVideo();
+      $("zoom-image").hidden = !$("zoom-image").hasAttribute("src");
+      $("zoom-play").hidden = false;
+      $("zoom-play").textContent = "Retry video preview";
+      $("zoom-status").textContent =
+        "This video could not play here. Try Save original, or open its source post.";
+    };
+    video.onerror = failed;
+    video.onplaying = () => {
+      if (epoch === zoomEpoch) $("zoom-status").textContent = "";
+    };
+    video.src = U.videoPreviewURL(item, data.pageURL);
+    try {
+      await video.play();
+    } catch {
+      failed();
+    }
+  };
   async function openZoom(item) {
+    stopVideo();
+    zoomPlaybackStarted = false;
     zoomItem = item;
     const epoch = ++zoomEpoch,
       values = visibleItems(),
       index = values.findIndex((v) => id(v) === id(item));
     $("zoom-title").textContent = item.label || U.filename(item);
     $("zoom-position").textContent =
-      `${index + 1} of ${values.length}${item.width && item.height ? ` / ${item.width} × ${item.height}` : ""}${item.kind === "video" ? " / video poster" : ""}`;
+      `${index + 1} of ${values.length}${item.width && item.height ? ` / ${item.width} × ${item.height}` : ""}${item.kind === "video" ? " / video" : ""}`;
     $("zoom-prev").disabled = index <= 0;
     $("zoom-next").disabled = index >= values.length - 1;
     $("zoom-save").disabled = !!U.issue(item);
     $("convert-tools").hidden = item.kind !== "image";
     $("zoom-status").textContent = "Loading preview…";
     $("zoom-image").hidden = true;
+    $("zoom-image").removeAttribute("src");
+    $("zoom-play").hidden = !U.videoPreviewURL(item, data.pageURL);
+    $("zoom-play").textContent = "Play video preview";
     if (!$("zoom").open) $("zoom").showModal();
     const loaded = await loadPreview(item);
     if (epoch !== zoomEpoch || !$("zoom").open) return;
+    if (!$("zoom-video").hidden) return;
     if (loaded) {
       $("zoom-image").src = previews.get(id(item)).image.src;
       $("zoom-image").alt = item.label || U.filename(item);
       $("zoom-image").hidden = false;
-      $("zoom-status").textContent = "";
-    } else
+      if (!zoomPlaybackStarted) $("zoom-status").textContent = "";
+    } else if (!zoomPlaybackStarted)
       $("zoom-status").textContent =
         "Preview unavailable. Try saving the original.";
   }
@@ -820,10 +874,11 @@
   };
   $("zoom").onclose = () => {
     zoomEpoch++;
+    stopVideo();
     $("zoom-image").removeAttribute("src");
   };
   document.addEventListener("keydown", (event) => {
-    if (event.target.matches("input,textarea,select")) return;
+    if (event.target.matches("input,textarea,select,video")) return;
     if ($("zoom").open && ["ArrowLeft", "ArrowRight"].includes(event.key)) {
       event.preventDefault();
       moveZoom(event.key === "ArrowRight" ? 1 : -1);

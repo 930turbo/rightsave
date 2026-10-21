@@ -37,7 +37,7 @@ b.text((100,37),'RightSave',font=font(24),fill='#f1f3f5')
 b.text((1006,42),'Firefox + Chrome',font=font(17),fill='#a3a7ae')
 b.text((51,204),'See it.',font=font(100),fill='#f1f3f5')
 b.text((51,300),'Save it.',font=font(100),fill='#f1f3f5')
-b.text((58,447),'Your media. Your folder.',font=font(24),fill='#a3a7ae')
+b.text((58,447),'Images + videos. Your folder.',font=font(24),fill='#a3a7ae')
 b.text((58,563),'FREE / LOCAL     FIREFOX + CHROME',font=font(15),fill='#a3a7ae')
 
 shot = docs / 'library.png'

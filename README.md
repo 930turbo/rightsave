@@ -2,7 +2,7 @@
 
 # RightSave Free
 
-Find a photo you want to keep. Right-click it, choose a folder, and save it.
+Find a photo or video you want to keep. Right-click it, choose a folder, and save it.
 
 RightSave restores blocked right-click menus and looks through overlays for the media underneath. Open the gallery when you want a better look at everything on the page. Every tool is free, and you don’t need an account.
 
@@ -16,7 +16,17 @@ Load the previews you need, or load the whole page’s gallery at once. Stop loa
 
 Click a loaded image for a larger view. Use the arrow keys to browse, or save the original from there. There’s also a Copy link button on each file. Press `/` to jump to search.
 
-RightSave finds regular and lazy-loaded images, CSS backgrounds, accessible frames, canvas and SVG. It can capture the current frame of an unprotected video and save direct MP4/WebM files.
+RightSave finds regular and lazy-loaded images, CSS backgrounds, accessible frames, canvas and SVG. It can capture the current frame of an unprotected video and save direct MP4, WebM and Ogg files.
+
+## Save a video
+
+Play the video on its webpage, open RightSave and choose **Videos**. Load a preview, click it, then choose **Play video preview** to watch before saving. **Save video** or **Save original** opens Save As so you can pick the filename and folder.
+
+Direct MP4, WebM and Ogg files are supported. The original file keeps its sound when audio is included. A **Video only** label means the website provides a separate audio track; RightSave does not merge it. Protected playback and segmented streams cannot be combined.
+
+[![RightSave playing a video with native playback controls and Save original](docs/video.png)](https://930turbo.github.io/rightsave/demo/video.html)
+
+[Try the MP4 and WebM demo](https://930turbo.github.io/rightsave/demo/video.html). Both four-second samples have picture and sound. The app also includes an offline practice video and a saving walkthrough.
 
 ## Save a collection
 
@@ -26,7 +36,7 @@ Open an image’s larger preview to resize it or save a PNG, JPEG or WebP copy. 
 
 ![RightSave’s how-to guides and practice save](store/assets/help-1280x800.png)
 
-New to extensions? The quick start includes short walkthroughs and a bundled practice image. There’s help for finding videos, making a ZIP and troubleshooting a failed save.
+New to extensions? The quick start includes short walkthroughs and bundled practice media. There’s help for finding videos, making a ZIP and troubleshooting a failed save.
 
 ### On social sites
 
@@ -89,6 +99,8 @@ python tests/integration_collections.py --browser firefox
 python tests/integration_collections.py --browser chrome
 python tests/integration_help.py --browser firefox
 python tests/integration_help.py --browser chrome
+python tests/integration_video.py --browser firefox
+python tests/integration_video.py --browser chrome
 ```
 
 Set `FIREFOX_BINARY` or `CHROMIUM_BINARY` if needed. Chrome for Testing supports extension-loading flags. Automated checks cover representative fixtures, not every live logged-in feed. [Latest verification](docs/verification.json).

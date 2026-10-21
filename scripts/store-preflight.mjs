@@ -89,6 +89,7 @@ for (const name of [
   "library-1280x800.png",
   "collections-1280x800.png",
   "help-1280x800.png",
+  "video-1280x800.png",
   "promo-440x280.png",
   "marquee-1400x560.png",
 ])
@@ -97,6 +98,11 @@ for (const name of ["listing.txt", "review-notes.txt", "submission.html"])
   await fs.access(path.join(root, "store", name));
 for (const name of ["privacy.html", "security.html"])
   await fs.access(path.join(root, "docs", name));
+assert.deepEqual(
+  await fs.readFile(path.join(root, "extension/practice.webm")),
+  await fs.readFile(path.join(root, "docs/demo/rightsave-demo.webm")),
+);
+await fs.access(path.join(root, "docs/demo/rightsave-demo.mp4"));
 console.log(
   "Listing, guides, privacy notice and submission assets are present. Mozilla signing and review remain external steps.",
 );

@@ -20,7 +20,7 @@ store=root/'store'
 if (store/'assets'/'library-1280x800.png').exists():
     archive=out/f'RightSave-{version}-store-materials.zip'
     materials=[p for p in store.rglob('*') if p.is_file()]
-    materials += [root/name for name in ['README.md','LICENSE','docs/privacy.html','docs/compatibility.html','docs/verification.json','docs/security.html','docs/library.png','docs/support.png','docs/viewer.png','docs/social-preview.png']]
+    materials += [root/name for name in ['README.md','LICENSE','docs/privacy.html','docs/compatibility.html','docs/verification.json','docs/security.html','docs/library.png','docs/video.png','docs/demo/video.html','docs/demo/rightsave-demo.mp4','docs/demo/rightsave-demo.webm','docs/demo/video-poster.png','docs/support.png','docs/viewer.png','docs/social-preview.png']]
     with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
         for p in sorted(materials):z.write(p,p.relative_to(root).as_posix())
     with zipfile.ZipFile(archive) as z:assert z.testzip() is None

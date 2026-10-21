@@ -299,7 +299,17 @@
         <button id="close-zoom" class="secondary">Close preview</button>
       </div>
       <div class="viewer-stage">
-        <img id="zoom-image" alt="Expanded media preview" />
+        <img id="zoom-image" alt="Expanded media preview" /><video
+          id="zoom-video"
+          controls
+          playsinline
+          preload="none"
+          aria-label="Video preview"
+          hidden
+        ></video
+        ><button id="zoom-play" class="secondary" hidden>
+          Play video preview
+        </button>
         <p id="zoom-status" class="small" role="status" aria-live="polite"></p>
       </div>
       <div class="viewer-bottom">
