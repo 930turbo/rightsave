@@ -202,6 +202,9 @@ input[role="switch"]:checked::after { left: 19px; background: var(--action-ink);
 .actions { display: flex; align-items: center; flex-wrap: wrap; gap: 15px; }
 .actions a { font-size: 12px; }
 .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 38px; }
+.plans-three { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 28px; }
+.plan .plan-price { color:var(--ink); font-size:28px; line-height:1.5; }
+.plan-price span { display:block; color:var(--muted); font-size:11px; }
 .plan { padding-top: 24px; border-top: 1px solid var(--line); }
 .plan h2 { font: 500 32px/1.1 "Bahnschrift", sans-serif; letter-spacing: -.04em; max-width: 330px; }
 .plan p, .plan ul { color: var(--muted); font-size: 12px; margin-top: 17px; }

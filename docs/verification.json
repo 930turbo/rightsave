@@ -1,8 +1,8 @@
 {
-  "version": "3.0.0",
+  "version": "3.1.0",
   "edition": "free",
   "client_date": "2026-10-21",
-  "unit_checks": 29,
+  "unit_checks": 58,
   "firefox": {
     "checks": 44,
     "passed": [
@@ -169,11 +169,46 @@
     ],
     "browser": "Chromium"
   },
-  "total_checks": 159,
+  "studio_chromium": {
+    "checks": 11,
+    "passed": [
+      "Configured build labels hosted Pro and Studio checkout as tests",
+      "Receipt key activates Studio through the real background RPC",
+      "Customer email is discarded rather than stored",
+      "Repeated activation does not consume another provider activation",
+      "Studio enables collection and source-record controls",
+      "Native ZIP contains three exact photos and both source records",
+      "Source records match archive filenames and the source page",
+      "Workflow pack saves the actual local workflow",
+      "File import restores a portable workflow without uploading it",
+      "Deactivation releases the provider instance before returning to Free",
+      "Disabled provider license removes paid access on its next check"
+    ],
+    "browser": "156.0.8078.4"
+  },
+  "studio_firefox": {
+    "checks": 11,
+    "passed": [
+      "Configured build labels hosted Pro and Studio checkout as tests",
+      "Receipt key activates Studio through the real background RPC",
+      "Customer email is discarded rather than stored",
+      "Repeated activation does not consume another provider activation",
+      "Studio enables collection and source-record controls",
+      "Native ZIP contains three exact photos and both source records",
+      "Source records match archive filenames and the source page",
+      "Workflow pack saves the actual local workflow",
+      "File import restores a portable workflow without uploading it",
+      "Deactivation releases the provider instance before returning to Free",
+      "Disabled provider license removes paid access on its next check"
+    ],
+    "browser": "158.0.1"
+  },
+  "total_checks": 210,
   "web_ext_lint": {
     "errors": 0,
     "warnings": 0,
-    "notices": 0
+    "notices": 0,
+    "free_and_merchant_builds": true
   },
-  "scope": "Synthetic payloads and local fixtures in disposable Firefox/Chromium profiles. Save As verified with test-only native-dialog overrides. Licensed workflow tests use ephemeral test entitlements. Live logged-in feeds are not certified."
+  "scope": "Local fixtures and synthetic social payloads in disposable browser profiles. Native Save As is requested and tests automate its destination. Signed test entitlements and deterministic Lemon Squeezy responses exercise paid flows. No real merchant checkout, charge, refund or live logged-in feed is certified."
 }

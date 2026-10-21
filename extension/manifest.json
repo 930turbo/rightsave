@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "RightSave",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Save images and direct-file videos with right-click, large previews, and enhanced social-site media detection.",
   "browser_specific_settings": {
     "gecko": {
@@ -31,6 +31,7 @@
     "scripts": [
       "compat.js",
       "shared.js",
+      "payments.js",
       "commerce.js",
       "background.js"
     ]

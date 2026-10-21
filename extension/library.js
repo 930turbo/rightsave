@@ -5,10 +5,11 @@
   const plan=await RightSaveCommerce.status();
   const settings=await browser.storage.local.get({thumbnailSize:"large",theme:"dark",quickSave:true});
   document.documentElement.dataset.theme=settings.theme;
-  $("plan-label").textContent=plan.plan==="pro"?"Pro":plan.plan==="supporter"?"Supporter":"Free";
+  $("plan-label").textContent=plan.studio?"Studio":plan.plan==="pro"?"Pro":plan.plan==="supporter"?"Supporter":"Free";
   $("pro-note").textContent=plan.pro?"Pro workflows are active on this browser.":"Pro adds ZIP collections, saved workflows, batch naming, dimension filters and list export. Individual saves stay free.";
   $("pro-link").hidden=plan.pro;
   for(const id of ["min-width","select-visible","template","preset","preset-name","apply-preset","delete-preset","save-preset","export"])$(id).disabled=!plan.pro;
+  for(const id of ["source-records","export-pack","import-pack"])$(id).disabled=!plan.studio;
   function notice(text){$("notice").hidden=!text;$("notice").textContent=text;}
   $("quick-toggle").checked=settings.quickSave;
   $("quick-toggle").onchange=async()=>{await browser.storage.local.set({quickSave:$("quick-toggle").checked});notice($("quick-toggle").checked?"Right-click Save As enabled on active sites.":"Use the RightSave submenu when you right-click media.");};
@@ -111,7 +112,9 @@
     busy=true;updateSelection();zipController=new AbortController();$("cancel-zip").hidden=false;
     let owned="";
     try{
-      await RightSaveCommerce.requirePro();const zip=new RightSavePro.Zip();
+      await RightSaveCommerce.requirePro();const zip=new RightSavePro.Zip(),records=[];
+      const withRecords=$("source-records").checked;
+      if(withRecords){await RightSaveCommerce.requireStudio();if(items.length>98)throw new Error("Select up to 98 files to leave room for two source records.");}
       for(const [index,item] of items.entries()){
         if(zipController.signal.aborted)throw new DOMException("Canceled","AbortError");
         $("archive-status").textContent=`Preparing ${index+1} / ${items.length}…`;
@@ -119,8 +122,9 @@
         const timer=setTimeout(()=>zipController.abort(),30000);
         let bytes;try{bytes=await RightSavePro.fetchFile(source.url,zipController.signal);}finally{clearTimeout(timer);}
         const name=$("template").value.trim()?U.templatedFilename(item,$("template").value.trim(),index+1):source.filename;
-        zip.add(name,bytes);
+        const filename=zip.add(name,bytes);records.push({filename,item:{...item,pageURL:item.pageURL||data.pageURL},bytes:bytes.length});
       }
+      if(withRecords){const record=RightSavePro.sourceRecords(records);zip.add("_rightsave/sources.json",new TextEncoder().encode(record.json));zip.add("_rightsave/sources.csv",new TextEncoder().encode(record.csv));}
       owned=URL.createObjectURL(zip.blob());const result=await send({type:"save-archive",url:owned});if(result.error)throw new Error(result.error);
       if(result.id===null){$("archive-status").textContent="ZIP save canceled.";URL.revokeObjectURL(owned);owned="";}
       else{
@@ -136,6 +140,9 @@
   $("apply-preset").onclick=async()=>{try{const p=(await RightSavePro.presets()).find(p=>p.name===$("preset").value);if(!p)throw new Error("Choose a saved workflow.");filter=p.filter;size=p.size;$("search").value=p.search;$("min-width").value=p.minWidth;$("sort").value=p.sort;$("template").value=p.template;$("preset-name").value=p.name;document.querySelectorAll("[data-filter]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.filter===filter)));render();notice("Workflow applied.");}catch(error){notice(error.message);}};
   $("delete-preset").onclick=async()=>{try{await RightSavePro.removePreset($("preset").value);await refreshPresets();notice("Workflow removed.");}catch(error){notice(error.message);}};
   await refreshPresets();
+  $("export-pack").onclick=async()=>{try{const text=await RightSavePro.exportPack(),result=await send({type:"save-workflow-pack",text});notice(result.error||(result.id===null?"Export canceled.":"Workflow pack sent to browser Downloads."));}catch(error){notice(error.message);}};
+  $("import-pack").onclick=()=>$("pack-file").click();
+  $("pack-file").onchange=async()=>{try{const file=$("pack-file").files[0];if(!file)return;if(file.size>50000)throw new Error("Choose a workflow pack under 50 KB.");const count=await RightSavePro.importPack(await file.text());await refreshPresets();notice(`Imported ${count} workflows. Matching names were replaced.`);}catch(error){notice(error.message);}finally{$("pack-file").value="";}};
   $("close-zoom").onclick=()=>$("zoom").close();$("zoom").onclick=event=>{if(event.target===$("zoom"))$("zoom").close();};
   render();
 })().catch(error=>{const n=document.getElementById("notice");n.hidden=false;n.textContent=error.message;});

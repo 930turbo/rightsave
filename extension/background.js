@@ -45,7 +45,7 @@ async function openPicker(tab, items, notice = "", title = "Media at this spot")
   const stored = await browser.storage.session.get(null);
   const stale = Object.keys(stored).filter(key => /^(picker:|download:)/.test(key) && Date.now() - stored[key].created > 2 * 60 * 60 * 1000);
   if (stale.length) await browser.storage.session.remove(stale);
-  await browser.storage.session.set({["picker:" + id]: {tabId: tab.id, pageTitle: tab.title || "Webpage", title, items, notice, created: Date.now()}});
+  await browser.storage.session.set({["picker:" + id]: {tabId: tab.id, pageURL:tab.url, pageTitle: tab.title || "Webpage", title, items, notice, created: Date.now()}});
   await browser.tabs.create({url: browser.runtime.getURL("library.html") + "?session=" + id, windowId: tab.windowId});
 }
 async function scan(tabId) {
@@ -159,6 +159,12 @@ browser.menus.onClicked.addListener(async (info, tab) => {
     if (tab) await openPicker(tab, [], error.message + " Refresh the webpage after installing RightSave.");
   }
 });
+globalThis.RIGHTSAVE_BACKGROUND=true;
+let paymentPending;
+async function paymentAction(action) {
+  if(paymentPending)throw new Error("A license change is already in progress. Please wait.");
+  paymentPending=action();try{return await paymentPending;}finally{paymentPending=null;}
+}
 RS.listen((message, sender) => {
   if (message.type === "quick-save" && sender.tab && sender.id === browser.runtime.id) return (async () => {
     const item = {...message.item, frameId: sender.frameId ?? 0, pageURL: sender.url};
@@ -174,6 +180,23 @@ RS.listen((message, sender) => {
   })();
   // Only extension pages can ask the background to scan, open tabs, or start downloads.
   if (!sender.url?.startsWith(browser.runtime.getURL(""))) return;
+  if (message.type === "commerce") return (async () => {
+    try {
+      const config=await RightSaveCommerce.config();
+      if(message.action==="status")return await RightSaveCommerce.status();
+      if(message.action==="refresh"){await RightSavePayments.status(config.lemon,true);return await RightSaveCommerce.status();}
+      if(message.action==="activate"){
+        if(config.lemon)await paymentAction(()=>RightSavePayments.activate(config.lemon,message.key));
+        else await RightSaveCommerce.activate(message.key);
+        return await RightSaveCommerce.status();
+      }
+      if(message.action==="deactivate"){
+        await paymentAction(()=>RightSavePayments.deactivate());
+        await browser.storage.local.remove("license");return await RightSaveCommerce.status();
+      }
+      return {error:"Unknown license action."};
+    }catch(error){return {error:error.message};}
+  })();
   if (message.type === "browse") return (async () => {
     try {
       const tab = await browser.tabs.get(message.tabId);
@@ -206,6 +229,13 @@ RS.listen((message, sender) => {
       await RightSaveCommerce.requirePro();
       if(typeof message.url!=="string"||!message.url.startsWith("blob:"+browser.runtime.getURL("")))throw new Error("Invalid archive URL.");
       return {id:await save({url:message.url,kind:"document",mime:"application/zip",suggestedName:"rightsave-collection.zip"},message.tabId)};
+    }catch(error){return {error:error.message};}
+  })();
+  if (message.type === "save-workflow-pack") return (async () => {
+    try{
+      await RightSaveCommerce.requireStudio();
+      if(typeof message.text!=="string"||message.text.length>50000)throw new Error("Invalid workflow pack.");
+      return {id:await save({url:"data:application/json;charset=utf-8,"+encodeURIComponent(message.text),kind:"document",mime:"application/json",suggestedName:"rightsave-workflows.json"},message.tabId)};
     }catch(error){return {error:error.message};}
   })();
   if (message.type === "save-batch") return (async () => {

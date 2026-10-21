@@ -69,5 +69,27 @@ globalThis.RightSavePro = (() => {
     if(!count)throw new Error("The media host returned an empty file.");
     const bytes=new Uint8Array(count);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}return bytes;
   }
-  return {Zip,crc32,preset,presets,savePreset,removePreset,fetchFile,MAX_BYTES,MAX_FILE};
+  async function exportPack(){
+    await RightSaveCommerce.requireStudio();
+    return JSON.stringify({product:"rightsave",version:1,workflows:await presets()},null,2);
+  }
+  async function importPack(text){
+    await RightSaveCommerce.requireStudio();
+    if(typeof text!=="string"||text.length>50000)throw new Error("Choose a RightSave workflow pack under 50 KB.");
+    const pack=JSON.parse(text);
+    if(pack.product!=="rightsave"||pack.version!==1||!Array.isArray(pack.workflows)||pack.workflows.length>20)throw new Error("This is not a supported RightSave workflow pack.");
+    const incoming=pack.workflows.map(preset),merged=new Map((await presets()).map(p=>[p.name,p]));
+    for(const p of incoming)merged.set(p.name,p);
+    if(merged.size>20)throw new Error("The pack would exceed 20 workflows. Remove some and try again.");
+    await browser.storage.local.set({workflowPresets:[...merged.values()]});return incoming.length;
+  }
+  function publicURL(value){try{const u=new URL(value);if(!["http:","https:"].includes(u.protocol))return "";u.search="";u.hash="";u.username="";u.password="";return u.href.slice(0,2000);}catch{return "";}}
+  function sourceRecords(rows){
+    if(!Array.isArray(rows)||rows.length>98)throw new Error("Use up to 98 media files when including source records.");
+    const records=rows.map(r=>({filename:String(r.filename).slice(0,600),label:String(r.item.label||"").slice(0,300),page:publicURL(r.item.pageURL),media:publicURL(r.item.url),width:Number(r.item.width)||0,height:Number(r.item.height)||0,bytes:r.bytes}));
+    const cell=value=>{let text=String(value??"");if(/^[\s]*[=+@-]/.test(text))text="'"+text;return '"'+text.replaceAll('"','""')+'"';};
+    const columns=["filename","label","page","media","width","height","bytes"];
+    return {json:JSON.stringify({created:new Date().toISOString(),notice:"URLs omit query strings. Source records do not grant reuse rights.",files:records},null,2),csv:[columns,...records.map(r=>columns.map(c=>r[c]))].map(row=>row.map(cell).join(",")).join("\r\n")+"\r\n"};
+  }
+  return {Zip,crc32,preset,presets,savePreset,removePreset,fetchFile,exportPack,importPack,sourceRecords,MAX_BYTES,MAX_FILE};
 })();

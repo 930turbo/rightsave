@@ -4,8 +4,8 @@ import vm from 'node:vm';
 import fs from 'node:fs/promises';
 import {spawnSync} from 'node:child_process';
 const source=await fs.readFile(new URL('../extension/pro.js',import.meta.url),'utf8');
-const store={};let entitled=false;
-const context=vm.createContext({Uint8Array,Uint32Array,DataView,TextEncoder,Blob,Date,fetch,RightSaveCommerce:{requirePro:async()=>{if(!entitled)throw new Error('Pro required');}},browser:{storage:{local:{get:async()=>store,set:async v=>Object.assign(store,v)}}}});
+const store={};let entitled=false,studio=false;
+const context=vm.createContext({URL,Map,Uint8Array,Uint32Array,DataView,TextEncoder,Blob,Date,fetch,RightSaveCommerce:{requirePro:async()=>{if(!entitled)throw new Error('Pro required');},requireStudio:async()=>{if(!studio)throw new Error('Studio required');}},browser:{storage:{local:{get:async()=>store,set:async v=>Object.assign(store,v)}}}});
 vm.runInContext(source,context);const P=context.RightSavePro;
 const valid={name:'Product references',template:'{site}/{name}-{index}.{ext}',search:'photo',minWidth:800,filter:'image',sort:'largest',size:'xl'};
 test('ZIP round-trips through an independent reader with UTF-8, folders and duplicate names',async()=>{
@@ -31,4 +31,15 @@ test('Preset storage requires Pro on every operation',async()=>{
 test('Published configuration defaults to free without payment destinations',async()=>{
   const config=JSON.parse(await fs.readFile(new URL('../extension/commerce-config.json',import.meta.url),'utf8'));
   assert.equal(config.edition,'free');assert.equal(config.publicKey,null);assert.equal(config.checkoutURL,null);assert.equal(config.supportURL,null);
+});
+test('Studio workflow packs round-trip allowlisted fields and reject malformed imports atomically',async()=>{
+  entitled=true;studio=true;await P.savePreset(valid);const pack=await P.exportPack();store.workflowPresets=[];assert.equal(await P.importPack(pack),1);assert.equal((await P.presets())[0].name,valid.name);
+  const before=JSON.stringify(store);await assert.rejects(()=>P.importPack(JSON.stringify({product:'rightsave',version:1,workflows:[valid,{...valid,size:'unknown'}]})));assert.equal(JSON.stringify(store),before);
+  await P.importPack(JSON.stringify({product:'rightsave',version:1,workflows:[{...valid,name:'Shared',injected:'discard'}]}));assert.equal(store.workflowPresets[1].injected,undefined);
+});
+test('Pro does not unlock Studio pack operations',async()=>{entitled=true;studio=false;await assert.rejects(()=>P.exportPack());await assert.rejects(()=>P.importPack('{}'));});
+test('Source records preserve actual archive names, redact signed queries and neutralize spreadsheet formulas',()=>{
+  const records=P.sourceRecords([{filename:'images/photo (2).png',bytes:12,item:{label:'=HYPERLINK("evil")',url:'https://media.test/photo.png?token=private',pageURL:'https://social.test/post/1?secret=private#fragment',width:900,height:600}}]);
+  assert.ok(!records.json.includes('private'));assert.ok(records.csv.includes("'=HYPERLINK"));const data=JSON.parse(records.json);assert.equal(data.files[0].filename,'images/photo (2).png');assert.equal(data.files[0].page,'https://social.test/post/1');
+  assert.throws(()=>P.sourceRecords(Array(99).fill({})));
 });

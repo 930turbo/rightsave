@@ -1,0 +1,55 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import fs from 'node:fs/promises';
+import crypto from 'node:crypto';
+import {billingConfig} from '../scripts/billing-config.mjs';
+const source=await fs.readFile(new URL('../extension/payments.js',import.meta.url),'utf8');
+const key='customer-test-license',instance='browser-instance';
+const config={provider:'lemonsqueezy',testMode:true,storeId:7,products:{pro:{productId:8,variantId:9,checkoutURL:'https://rightsave.lemonsqueezy.com/checkout/buy/00000000-0000-0000-0000-000000000009'},studio:{productId:8,variantId:10,checkoutURL:'https://rightsave.lemonsqueezy.com/checkout/buy/00000000-0000-0000-0000-000000000010'}}};
+function harness(){
+  const store={},calls=[];let now=Date.now(),mode='ok',variant=9;
+  const reply=action=>({[action==='activate'?'activated':action==='deactivate'?'deactivated':'valid']:true,license_key:{id:11,key,status:'active',expires_at:null},instance:{id:instance},meta:{store_id:7,product_id:8,variant_id:variant,customer_email:'private@example.org'}});
+  const ctx=vm.createContext({URL,URLSearchParams,AbortSignal,crypto:crypto.webcrypto,Date:class extends Date{static now(){return now;}},fetch:async(url,options)=>{
+    calls.push({url,options});const action=url.split('/').at(-1);
+    if(mode==='outage')throw new TypeError('offline');
+    const data=reply(action);
+    if(mode==='invalid')data.valid=false;
+    if(mode==='disabled')data.license_key.status='disabled';
+    if(mode==='wrong-store')data.meta.store_id=999;
+    if(mode==='wrong-product')data.meta.product_id=999;
+    if(mode==='wrong-instance')data.instance.id='other';
+    if(mode==='wrong-key')data.license_key.key='other';
+    if(mode==='expired')data.license_key.expires_at='2000-01-01';
+    if(mode==='malformed-expiry')data.license_key.expires_at='tomorrow';
+    if(mode==='limit'&&action==='activate')data.activated=false;
+    if(mode==='deactivate-failure')data.deactivated=false;
+    return {ok:mode!=='rate-limit',status:mode==='rate-limit'?429:200,json:async()=>data};
+  },browser:{storage:{local:{get:async()=>store,set:async v=>Object.assign(store,v),remove:async k=>{delete store[k];}}}}});
+  vm.runInContext(source,ctx);
+  return {P:ctx.RightSavePayments,store,calls,setMode:v=>mode=v,studio:()=>variant=10,advance:ms=>now+=ms};
+}
+test('Activation binds the provider, product, variant, key and browser instance',async()=>{
+  const h=harness(),c=await h.P.activate(config,key);assert.equal(c.plan,'pro');assert.equal((await h.P.status(config)).claims.plan,'pro');
+  assert.equal(h.calls.length,2);assert.equal(h.calls[1].options.credentials,'omit');assert.equal(h.calls[1].options.redirect,'error');assert.equal(h.calls[1].options.referrerPolicy,'no-referrer');assert.equal(h.calls[1].options.headers.Authorization,undefined);
+  assert.ok(!JSON.stringify(h.store).includes('private@example.org'));assert.ok(!h.calls.some(c=>c.options.body.includes('http')));
+});
+test('Studio variant maps to Studio entitlements',async()=>{const h=harness();h.studio();assert.equal((await h.P.activate(config,key)).plan,'studio');});
+test('Repeated activation validates the existing instance without consuming another seat',async()=>{const h=harness();await h.P.activate(config,key);await h.P.activate(config,key);assert.equal(h.calls.filter(c=>c.url.endsWith('/activate')).length,1);});
+test('A different key cannot orphan the active browser seat',async()=>{const h=harness();await h.P.activate(config,key);await assert.rejects(()=>h.P.activate(config,'another-license'));});
+for(const mode of ['wrong-store','wrong-product'])test(`Preflight rejects ${mode} before consuming an activation`,async()=>{const h=harness();h.setMode(mode);await assert.rejects(()=>h.P.activate(config,key));assert.equal(h.calls.length,1);});
+for(const mode of ['wrong-instance','wrong-key','disabled','expired','malformed-expiry','invalid'])test(`Refresh revokes access for ${mode}`,async()=>{const h=harness();await h.P.activate(config,key);h.setMode(mode);assert.ok((await h.P.status(config,true)).error);assert.equal(h.store.purchaseLicense,undefined);});
+test('Provider activation limits produce no local entitlement',async()=>{const h=harness();h.setMode('limit');await assert.rejects(()=>h.P.activate(config,key));assert.equal(h.store.purchaseLicense,undefined);});
+test('Offline grace expires seven days after the last successful validation',async()=>{const h=harness();await h.P.activate(config,key);h.setMode('outage');h.advance(2*h.P.DAY);assert.equal((await h.P.status(config,true)).offline,true);h.advance(6*h.P.DAY);assert.ok(!(await h.P.status(config,true)).claims);});
+test('Rate limits preserve a recently verified license without sending more calls',async()=>{const h=harness();await h.P.activate(config,key);h.setMode('rate-limit');h.advance(2*h.P.DAY);assert.equal((await h.P.status(config,true)).offline,true);const n=h.calls.length;await h.P.status(config);assert.equal(h.calls.length,n);});
+test('Clock rollback does not extend offline access',async()=>{const h=harness();await h.P.activate(config,key);h.setMode('outage');h.advance(-1000);assert.ok(!(await h.P.status(config,true)).claims);});
+test('A forced failed check reports offline access even while the daily cache is fresh',async()=>{const h=harness();await h.P.activate(config,key);h.setMode('outage');await h.P.status(config,true);assert.equal((await h.P.status(config)).offline,true);});
+test('Cached entitlements stop at their license expiry',async()=>{const h=harness();await h.P.activate(config,key);h.store.purchaseLicense.claims.expires=Date.now()-1;assert.ok(!(await h.P.status(config)).claims);});
+test('Concurrent refresh and deactivation cannot restore a released instance',async()=>{const h=harness();await h.P.activate(config,key);await Promise.all([h.P.status(config,true),h.P.deactivate()]);assert.equal(h.store.purchaseLicense,undefined);});
+test('Ordinary use refreshes after 24 hours',async()=>{const h=harness();await h.P.activate(config,key);await h.P.status(config);assert.equal(h.calls.length,2);h.advance(h.P.DAY+1);await h.P.status(config);assert.equal(h.calls.length,3);});
+test('Deactivation releases the actual provider instance before clearing storage',async()=>{const h=harness();await h.P.activate(config,key);await h.P.deactivate();assert.ok(h.calls.at(-1).options.body.includes('instance_id=browser-instance'));assert.equal(h.store.purchaseLicense,undefined);});
+test('Failed deactivation preserves the instance so it can be retried',async()=>{const h=harness();await h.P.activate(config,key);h.setMode('deactivate-failure');await assert.rejects(()=>h.P.deactivate());assert.ok(h.store.purchaseLicense);});
+test('A changed product configuration cannot reuse cached entitlement',async()=>{const h=harness();await h.P.activate(config,key);assert.equal(await h.P.status({...config,storeId:99}),null);});
+test('Default Free build cannot activate a provider key',async()=>{const h=harness();await assert.rejects(()=>h.P.activate(null,key));assert.equal(h.calls.length,0);});
+test('Checkout accepts only hosted share links and declared plans',()=>{const h=harness();assert.equal(h.P.checkout(config,'pro'),config.products.pro.checkoutURL);for(const url of ['http://rightsave.lemonsqueezy.com/checkout/buy/x','https://evil.test/checkout/buy/x','https://rightsave.lemonsqueezy.com/checkout/?cart=x','https://user@rightsave.lemonsqueezy.com/checkout/buy/x'])assert.throws(()=>h.P.checkout({...config,products:{pro:{checkoutURL:url}}},'pro'));assert.throws(()=>h.P.checkout(config,'enterprise'));});
+test('Build strips unknown fields and rejects reused variants and non-provider checkout',()=>{assert.equal(billingConfig({...config,secret:'never ship'}).secret,undefined);assert.throws(()=>billingConfig({...config,products:{...config.products,studio:config.products.pro}}));assert.throws(()=>billingConfig({...config,products:{...config.products,pro:{...config.products.pro,checkoutURL:'https://evil.test/checkout/buy/x'}}}));});

@@ -1,0 +1,17 @@
+{
+  "provider": "lemonsqueezy",
+  "testMode": true,
+  "storeId": 1,
+  "products": {
+    "pro": {
+      "productId": 1,
+      "variantId": 1,
+      "checkoutURL": "https://YOUR-STORE.lemonsqueezy.com/checkout/buy/REPLACE-PRO-SHARE-ID"
+    },
+    "studio": {
+      "productId": 1,
+      "variantId": 2,
+      "checkoutURL": "https://YOUR-STORE.lemonsqueezy.com/checkout/buy/REPLACE-STUDIO-SHARE-ID"
+    }
+  }
+}

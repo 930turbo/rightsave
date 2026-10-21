@@ -10,9 +10,9 @@ if(command==='init'){
   await fs.writeFile(value('--public'),JSON.stringify(publicKey.export({format:'jwk'}),null,2)+'\n',{flag:'wx'});
   console.log('Created a private signing key and public verification key. Copy only the public JWK into commerce-config.json.');
 }else if(command==='issue'){
-  if(!args.includes('--private')||!args.includes('--id'))throw new Error('Usage: node scripts/license.mjs issue --private KEY.pem --id CUSTOMER_REFERENCE --plan pro|supporter [--expires YYYY-MM-DD]');
+  if(!args.includes('--private')||!args.includes('--id'))throw new Error('Usage: node scripts/license.mjs issue --private KEY.pem --id CUSTOMER_REFERENCE --plan pro|studio|supporter [--expires YYYY-MM-DD]');
   const plan=args.includes('--plan')?value('--plan'):'pro';
-  if(!['pro','supporter'].includes(plan))throw new Error('Invalid plan.');
+  if(!['pro','studio','supporter'].includes(plan))throw new Error('Invalid plan.');
   const claims={product:'rightsave',id:value('--id'),plan,issued:Date.now()};
   if(args.includes('--expires')){claims.expires=Date.parse(value('--expires'));if(!Number.isFinite(claims.expires)||claims.expires<=Date.now())throw new Error('Expiry must be a valid future date.');}
   const payload=Buffer.from(JSON.stringify(claims)).toString('base64url');

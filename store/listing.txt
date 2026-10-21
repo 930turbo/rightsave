@@ -4,7 +4,7 @@ Save images and direct-file videos with right-click, large previews, and social-
 
 Free: unlimited individual Save As, large previews, Load all, search, site controls, media detection, canvas/SVG and video-frame export.
 
-Pro: ZIP collections, saved workflows, batch Save As, custom filenames, dimension filters and list export. Pro sales are not open yet. No billing is active.
+Optional paid tools: Pro adds ZIP collections, saved workflows, batch Save As, naming rules, dimension filters and list export. Studio adds portable workflow packs and CSV/JSON source records. Sales are not open; this package is the Free local edition and makes no billing requests.
 
 Protected or segmented streams cannot be assembled. Reddit video-only tracks are labeled. Some sites require login and signed URLs can expire.
 

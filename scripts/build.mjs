@@ -1,8 +1,11 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import {billingConfig} from './billing-config.mjs';
 const root = path.resolve(import.meta.dirname, '..');
 const common = JSON.parse(await fs.readFile(path.join(root,'extension','manifest.json'),'utf8'));
 const keyIndex=process.argv.indexOf('--public-key');
+const billingIndex=process.argv.indexOf('--billing');
+const lemon=billingIndex>=0?billingConfig(JSON.parse(await fs.readFile(process.argv[billingIndex+1],'utf8'))):null;
 let publicKey=null;
 if(keyIndex>=0){
   publicKey=JSON.parse(await fs.readFile(process.argv[keyIndex+1],'utf8'));
@@ -13,9 +16,10 @@ for (const target of ['firefox','chrome']) {
   await fs.mkdir(destination,{recursive:true});
   await fs.cp(path.join(root,'extension'),destination,{recursive:true});
   const commerce=JSON.parse(await fs.readFile(path.join(root,'extension','commerce-config.json'),'utf8'));
-  commerce.edition=publicKey?'licensed':'free';commerce.publicKey=publicKey;
+  commerce.edition=publicKey||lemon?'licensed':'free';commerce.publicKey=publicKey;commerce.lemon=lemon;
   await fs.writeFile(path.join(destination,'commerce-config.json'),JSON.stringify(commerce,null,2)+'\n');
   const manifest = structuredClone(common);
+  if(lemon)manifest.browser_specific_settings.gecko.data_collection_permissions={required:['authenticationInfo']};
   if (target==='chrome') {
     delete manifest.browser_specific_settings;
     manifest.permissions = manifest.permissions.filter(p=>!['menus','cookies'].includes(p));
