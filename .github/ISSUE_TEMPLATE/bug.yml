@@ -1,0 +1,30 @@
+name: Website compatibility or bug
+description: Report a reproducible media-saving issue
+title: "[Compatibility] "
+body:
+  - type: markdown
+    attributes:
+      value: "Please use public example URLs. Never attach private images, cookies, license tokens, or URLs containing access tokens."
+  - type: input
+    id: version
+    attributes:
+      label: RightSave and browser version
+      placeholder: RightSave 3.0.0, Firefox or Chrome version
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Public example webpage
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps, expected result, and actual result
+    validations:
+      required: true
+  - type: checkboxes
+    id: partial
+    attributes:
+      label: Download status
+      options:
+        - label: I waited for the browser Downloads panel to report completion before opening the file.

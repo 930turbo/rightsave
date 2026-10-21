@@ -1,0 +1,101 @@
+{
+  "manifest_version": 3,
+  "name": "RightSave",
+  "version": "3.0.0",
+  "description": "Save images and direct-file videos with right-click, large previews, and enhanced social-site media detection.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "rightsave@local.tools",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    }
+  },
+  "permissions": [
+    "menus",
+    "downloads",
+    "storage",
+    "scripting",
+    "cookies"
+  ],
+  "optional_permissions": [
+    "webRequest"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": [
+      "compat.js",
+      "shared.js",
+      "commerce.js",
+      "background.js"
+    ]
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "commands": {
+    "open-library": {
+      "suggested_key": {
+        "default": "Alt+Shift+S"
+      },
+      "description": "Find media on the current page"
+    }
+  },
+  "action": {
+    "default_title": "RightSave",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/16.png",
+      "32": "icons/32.png",
+      "48": "icons/48.png",
+      "128": "icons/128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "96": "icons/96.png",
+    "128": "icons/128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "compat.js",
+        "shared.js",
+        "sites.js",
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true,
+      "match_about_blank": true
+    },
+    {
+      "matches": [
+        "*://*.instagram.com/*",
+        "*://*.facebook.com/*",
+        "*://*.x.com/*",
+        "*://*.twitter.com/*",
+        "*://*.reddit.com/*",
+        "*://*.threads.net/*",
+        "*://*.threads.com/*",
+        "*://*.linkedin.com/*"
+      ],
+      "js": [
+        "page-bridge.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ]
+}

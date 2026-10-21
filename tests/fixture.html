@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>RightSave test page</title>
+<style>body{font:16px sans-serif;margin:30px}.tile{position:relative;width:240px;height:140px;margin:18px 0}.tile img{width:100%;height:100%}.overlay{position:absolute;inset:0;background:transparent}.background{background:url('/background.png') center/cover}.noevents{pointer-events:none}video{width:240px;height:140px}iframe{width:270px;height:190px}</style>
+<script>window.blocked=0;window.down=0;window.addEventListener('contextmenu',e=>{window.blocked++;e.preventDefault()},true);window.addEventListener('mousedown',e=>{if(e.button===2){window.down++;e.preventDefault()}},true)</script></head>
+<body><h1>RightSave integration fixtures</h1>
+<div class="tile" id="layered"><img alt="Under an overlay" src="/image.png"><div class="overlay" id="overlay"></div></div>
+<div class="tile background" id="background"></div>
+<div class="tile" id="pointer"><img class="noevents" alt="Pointer events disabled" src="/pointer.png"><div class="overlay"></div></div>
+<video id="video" controls preload="metadata" src="/video.webm"></video>
+<video id="stream" controls><source src="/playlist.m3u8" type="application/vnd.apple.mpegurl"></video>
+<canvas id="canvas" width="240" height="140"></canvas>
+<div id="shadow"></div><iframe src="/frame.html" title="Embedded fixture"></iframe>
+<img src="/image.png" data-original="/original.png" srcset="/image.png 1x, /responsive.png 2x" width="240" height="140" alt="Responsive variant">
+<a href="/linked.png"><img src="/image.png" width="240" height="140" alt="Linked original variant"></a>
+<svg width="240" height="140" aria-label="Fixture vector" onclick="window.fixtureClicked=true" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="140" fill="#344dc3"/><circle cx="120" cy="70" r="40" fill="white"/></svg>
+<script>const c=document.getElementById('canvas');c.getContext('2d').fillRect(0,0,240,140);const root=document.getElementById('shadow').attachShadow({mode:'open'});root.innerHTML='<img alt="Shadow image" src="/shadow.png" width="200" height="100">';const inline=new Image(120,70);inline.alt='Inline data image';inline.src=c.toDataURL();document.body.append(inline);fetch('/image.png').then(r=>r.blob()).then(b=>{const img=new Image(120,70);img.alt='Temporary blob image';img.src=URL.createObjectURL(b);document.body.append(img)});</script>
+</body></html>

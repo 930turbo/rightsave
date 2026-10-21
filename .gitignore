@@ -1,0 +1,17 @@
+node_modules/
+build/
+dist/
+.venv/
+__pycache__/
+tests/assets/
+tests/downloads/
+tests/*.xpi
+tests/results*.json
+tests/screenshots/
+tests/*.png
+*.pem
+*.key
+*private*jwk*
+.env*
+!.env.example
+*.log

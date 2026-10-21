@@ -1,0 +1,25 @@
+name: Feature or Pro idea
+description: Help shape RightSave's next development cycle
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What would you like to do?
+      description: Describe the media-saving workflow, rather than just a button.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested behavior
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Core saving
+        - Website compatibility
+        - Library and previews
+        - Batch workflows
+        - Supporter or Pro plans
+        - Accessibility

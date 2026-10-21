@@ -1,0 +1,9 @@
+Purpose: discover and save webpage media explicitly chosen by the user.
+
+All-site access: discover clicked media and scan arbitrary user-selected pages/frames. Menus: native submenu. Downloads: Save As. Scripting: frame scans. Storage: local preferences, licenses, saved workflows and session lists. Firefox cookies permission only passes cookieStoreId to downloads; cookie values are never read. Optional webRequest is off initially and observes video URLs/content types.
+
+The social MAIN-world bridge has no extension privileges. It reads bounded selected same-platform response text transiently; isolated code keeps only validated media fields. No eval, remote executable code, API requests, developer backend or telemetry. User opt-out and site exceptions clear caches.
+
+The default package is free. Pro checks signed ECDSA licenses locally. Payment destinations and production signing keys are unconfigured. ZIP export and saved workflows require Pro; core saving does not.
+
+Use README.md, docs/privacy.html, docs/compatibility.html and store/submission.html for details.
