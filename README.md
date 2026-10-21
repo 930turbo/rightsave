@@ -85,4 +85,4 @@ Set `FIREFOX_BINARY` or `CHROMIUM_BINARY` if needed. Chrome for Testing supports
 
 Found a bug? Include your browser version, the site and what happened in an [issue](https://github.com/930turbo/rightsave/issues). Keep private media, cookies and signed links out of public reports.
 
-Copyright © 2026 930turbo. Free local use is permitted under [LICENSE](LICENSE); other rights are reserved.
+Copyright © 2026 Gianni. Free local use is permitted under [LICENSE](LICENSE); other rights are reserved.
