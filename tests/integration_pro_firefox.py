@@ -32,7 +32,7 @@ try:
     tab=next(t for t in ext('return await browser.tabs.query({});') if t.get('url','').rstrip('/')==base)
     handles=set(driver.window_handles);ext('return await browser.runtime.sendMessage({type:"browse",tabId:arguments[0]});',tab['id'])
     wait.until(lambda d:bool(set(d.window_handles)-handles));driver.switch_to.window(next(iter(set(driver.window_handles)-handles)));wait.until(lambda d:len(d.find_elements(By.CSS_SELECTOR,'.media-card'))>=8)
-    check('Signed test entitlement activates Firefox Pro UI',driver.find_element(By.ID,'plan-label').text=='Pro')
+    check('Signed test entitlement activates Firefox licensed UI',driver.find_element(By.ID,'plan-label').text=='Plus')
     driver.find_element(By.CSS_SELECTOR,'#library-tools > summary').click()
     for label in ['Under an overlay','Canvas']:
         card=next(c for c in driver.find_elements(By.CSS_SELECTOR,'.media-card') if label in c.text);card.find_element(By.CSS_SELECTOR,'.tile-select input').click()

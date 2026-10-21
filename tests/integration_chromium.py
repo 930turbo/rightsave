@@ -71,6 +71,7 @@ try:
     check('Chrome service worker opens media library',result.get('ok') is True)
     wait.until(lambda d:bool(set(d.window_handles)-before_handles));driver.switch_to.window(next(iter(set(driver.window_handles)-before_handles)))
     wait.until(lambda d:len(d.find_elements(By.CSS_SELECTOR,'.media-card'))>=8)
+    driver.execute_cdp_cmd('Browser.setDownloadBehavior',{'behavior':'allow','downloadPath':str(downloads),'eventsEnabled':True})
     check('Chrome detects backgrounds, frames, canvas and images',len(driver.find_elements(By.CSS_SELECTOR,'.media-card'))>=8)
     driver.find_element(By.ID,'load-all').click();wait.until(lambda d:d.find_element(By.ID,'load-all').is_enabled())
     check('Chrome Load all renders larger thumbnails',len(driver.find_elements(By.CSS_SELECTOR,'.preview img'))>=5 and driver.find_element(By.CSS_SELECTOR,'.preview').size['height']>=280)

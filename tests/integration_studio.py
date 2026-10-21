@@ -11,7 +11,7 @@ parser=argparse.ArgumentParser();parser.add_argument('--browser',choices=['chrom
 root=Path(__file__).resolve().parents[1];assets=root/'tests'/'assets';test_extension=assets/('studio-'+target)
 shutil.copytree(root/'build'/target,test_extension,dirs_exist_ok=True)
 config=json.loads((test_extension/'commerce-config.json').read_text());config['edition']='licensed';config['publicKey']=None
-config['lemon']={'provider':'lemonsqueezy','testMode':True,'storeId':7,'products':{p:{'productId':8,'variantId':i,'checkoutURL':f'https://rightsave.lemonsqueezy.com/checkout/buy/00000000-0000-0000-0000-0000000000{i}'} for p,i in [('pro',9),('studio',10)]}}
+config['lemon']={'provider':'lemonsqueezy','testMode':True,'storeId':7,'products':{'plus':{'productId':8,'variantId':10,'checkoutURL':'https://rightsave.lemonsqueezy.com/checkout/buy/00000000-0000-0000-0000-000000000010'}}}
 (test_extension/'commerce-config.json').write_text(json.dumps(config))
 shutil.copyfile(root/'tests'/'payment-fixture.js',test_extension/'payment-fixture.js')
 manifest=json.loads((test_extension/'manifest.json').read_text())
@@ -24,6 +24,10 @@ else:
 downloads=root/'tests'/'downloads'/('studio-'+target+'-'+str(time.time_ns()));downloads.mkdir(parents=True)
 class Handler(http.server.SimpleHTTPRequestHandler):
     def log_message(self,*_):pass
+    def do_GET(self):
+        if self.path=='/duplicate.png':
+            payload=(root/'docs/demo/coast-photo.png').read_bytes();self.send_response(200);self.send_header('Content-Type','image/png');self.end_headers();self.wfile.write(payload);return
+        return super().do_GET()
 server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(Handler,directory=str(root/'docs'/'demo')))
 threading.Thread(target=server.serve_forever,daemon=True).start();base=f'http://127.0.0.1:{server.server_port}'
 if target=='firefox':
@@ -63,9 +67,10 @@ try:
     ext('await browser.tabs.remove((await browser.tabs.query({})).filter(t=>t.url===browser.runtime.getURL("welcome.html")).map(t=>t.id));return true;')
     if target=='chrome':driver.execute_cdp_cmd('Browser.setDownloadBehavior',{'behavior':'allow','downloadPath':str(downloads),'eventsEnabled':True})
     wait.until(lambda d:driver.find_element(By.ID,'activate').is_enabled())
-    check('Configured build labels hosted Pro and Studio checkout as tests','Test' in driver.find_element(By.ID,'checkout').text and 'Test' in driver.find_element(By.ID,'checkout-studio').text)
-    driver.find_element(By.ID,'license').send_keys('studio-test-key');driver.find_element(By.ID,'activate').click();wait.until(lambda d:'Studio is active' in driver.find_element(By.ID,'status').text)
-    check('Receipt key activates Studio through the real background RPC',driver.find_element(By.ID,'license').get_attribute('value')=='')
+    check('Configured build labels its hosted upgrade checkout as a test','Test Plus' in driver.find_element(By.ID,'checkout').text)
+    driver.find_element(By.CSS_SELECTOR,'#license-tools > summary').click()
+    driver.find_element(By.ID,'license').send_keys('studio-test-key');driver.find_element(By.ID,'activate').click();wait.until(lambda d:'Plus is active' in driver.find_element(By.ID,'status').text)
+    check('Receipt key activates the upgrade through the real background RPC',driver.find_element(By.ID,'license').get_attribute('value')=='')
     check('Customer email is discarded rather than stored','never-store' not in json.dumps(ext('return await browser.storage.local.get();')))
     ext('return await browser.runtime.sendMessage({type:"commerce",action:"activate",key:"studio-test-key"});')
     calls=ext('return (await browser.storage.local.get("mockCalls")).mockCalls;')
@@ -74,7 +79,7 @@ try:
     tab=next(t for t in ext('return await browser.tabs.query({});') if t.get('url','').rstrip('/')==base)
     before=set(driver.window_handles);ext('return await browser.runtime.sendMessage({type:"browse",tabId:arguments[0]});',tab['id']);wait.until(lambda d:bool(set(d.window_handles)-before));driver.switch_to.window(next(iter(set(driver.window_handles)-before)))
     wait.until(lambda d:len(d.find_elements(By.CSS_SELECTOR,'.media-card'))==3)
-    check('Studio enables collection and source-record controls',driver.find_element(By.ID,'plan-label').text=='Studio' and driver.find_element(By.ID,'source-records').is_enabled())
+    check('Upgrade enables collection and source-record controls',driver.find_element(By.ID,'plan-label').text=='Plus' and driver.find_element(By.ID,'source-records').is_enabled())
     driver.find_element(By.CSS_SELECTOR,'#library-tools > summary').click();driver.find_element(By.ID,'select-visible').click();driver.find_element(By.ID,'source-records').click();driver.find_element(By.ID,'save-zip').click()
     wait.until(lambda d:'3 files packaged' in driver.find_element(By.ID,'archive-status').text)
     wait.until(lambda d:ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:1}))[0]?.state;')=='complete')
@@ -83,6 +88,27 @@ try:
         record=json.loads(z.read('_rightsave/sources.json'))
         check('Native ZIP contains three exact photos and both source records',z.testzip() is None and len(z.namelist())==5 and z.read('coast-photo.png')==(root/'docs/demo/coast-photo.png').read_bytes() and '_rightsave/sources.csv' in z.namelist())
         check('Source records match archive filenames and the source page',len(record['files'])==3 and all(row['filename'] in z.namelist() and row['page'].startswith(base) for row in record['files']))
+    driver.find_element(By.ID,'load-all').click();wait.until(lambda d:driver.find_element(By.ID,'load-all').is_enabled())
+    driver.find_element(By.CSS_SELECTOR,'.preview img').click();wait.until(lambda d:driver.find_element(By.ID,'zoom').get_attribute('open'))
+    driver.find_element(By.CSS_SELECTOR,'#convert-tools > summary').click()
+    from selenium.webdriver.support.ui import Select
+    Select(driver.find_element(By.ID,'convert-format')).select_by_value('image/webp');Select(driver.find_element(By.ID,'convert-size')).select_by_value('1024')
+    driver.find_element(By.ID,'convert-save').click();wait.until(lambda d:'Converted 1024' in driver.find_element(By.ID,'zoom-status').text)
+    wait.until(lambda d:ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:1}))[0]?.state;')=='complete')
+    converted=Path(ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:1}))[0].filename;'))
+    from PIL import Image
+    with Image.open(converted) as image:check('Still-image conversion and resizing produce an actual WebP locally',image.format=='WEBP' and image.size==(1024,683))
+    driver.find_element(By.ID,'close-zoom').click()
+    library_handle=driver.current_window_handle
+    source_handle=next(h for h in driver.window_handles if h not in [ui,library_handle]);driver.switch_to.window(source_handle)
+    driver.execute_script('const img=new Image();img.src="/duplicate.png";img.alt="Duplicate coast";document.body.append(img);')
+    wait.until(lambda d:driver.execute_script('return document.images[document.images.length-1].complete'))
+    driver.switch_to.window(library_handle);driver.find_element(By.ID,'rescan').click();wait.until(lambda d:len(driver.find_elements(By.CSS_SELECTOR,'.media-card'))==4)
+    driver.find_element(By.ID,'select-visible').click();driver.find_element(By.ID,'dedupe-zip').click();driver.find_element(By.ID,'save-zip').click()
+    wait.until(lambda d:'1 duplicate skipped' in driver.find_element(By.ID,'archive-status').text)
+    wait.until(lambda d:ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:1}))[0]?.state;')=='complete')
+    unique=Path(ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:1}))[0].filename;'))
+    with zipfile.ZipFile(unique) as z:check('ZIP duplicate removal compares actual bytes across different URLs',len(z.namelist())==5 and len(json.loads(z.read('_rightsave/sources.json'))['files'])==3)
     driver.find_element(By.CSS_SELECTOR,'#workflow-tools > summary').click();driver.find_element(By.ID,'preset-name').send_keys('Shared collection');driver.find_element(By.ID,'save-preset').click();wait.until(lambda d:'Workflow saved' in driver.find_element(By.ID,'notice').text)
     # The shared-controls disclosure follows workflow-tools.
     driver.find_element(By.ID,'export-pack').find_element(By.XPATH,'ancestor::details[1]').find_element(By.TAG_NAME,'summary').click()
@@ -93,9 +119,9 @@ try:
     check('Workflow pack saves the actual local workflow',json.loads(pack.read_text())['workflows'][0]['name']=='Shared collection')
     ext('await browser.storage.local.set({workflowPresets:[]});return true;');driver.find_element(By.ID,'pack-file').send_keys(str(pack));wait.until(lambda d:'Imported 1' in driver.find_element(By.ID,'notice').text)
     check('File import restores a portable workflow without uploading it',ext('return (await browser.storage.local.get("workflowPresets")).workflowPresets[0].name;')=='Shared collection')
-    driver.switch_to.window(ui);driver.get(extension+'support.html');wait.until(lambda d:driver.find_element(By.ID,'remove-license').is_enabled());driver.find_element(By.ID,'remove-license').click();wait.until(lambda d:'Browser deactivated' in driver.find_element(By.ID,'status').text)
+    driver.switch_to.window(ui);driver.get(extension+'support.html');wait.until(lambda d:driver.find_element(By.ID,'license-tools').is_displayed());driver.find_element(By.CSS_SELECTOR,'#license-tools > summary').click();wait.until(lambda d:driver.find_element(By.ID,'remove-license').is_enabled());driver.find_element(By.ID,'remove-license').click();wait.until(lambda d:'Browser deactivated' in driver.find_element(By.ID,'status').text)
     check('Deactivation releases the provider instance before returning to Free',not ext('return !!(await browser.storage.local.get("purchaseLicense")).purchaseLicense;') and ext('return (await browser.storage.local.get("mockCalls")).mockCalls.at(-1).action;')=='deactivate')
-    driver.find_element(By.ID,'license').send_keys('studio-test-key');driver.find_element(By.ID,'activate').click();wait.until(lambda d:'Studio is active' in driver.find_element(By.ID,'status').text)
+    driver.find_element(By.ID,'license').send_keys('studio-test-key');driver.find_element(By.ID,'activate').click();wait.until(lambda d:'Plus is active' in driver.find_element(By.ID,'status').text)
     ext('await browser.storage.local.set({mockMode:"disabled"});return true;');driver.find_element(By.ID,'refresh-license').click();wait.until(lambda d:not ext('return !!(await browser.storage.local.get("purchaseLicense")).purchaseLicense;'))
     check('Disabled provider license removes paid access on its next check',ext('return (await browser.runtime.sendMessage({type:"commerce",action:"status"})).plan;')=='free')
     result_path.write_text(json.dumps({'status':'passed','checks':len(checks),'passed':checks,'browser':driver.capabilities['browserVersion'],'provider':'deterministic fixture, no real checkout'},indent=2))

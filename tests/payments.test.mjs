@@ -35,6 +35,7 @@ test('Activation binds the provider, product, variant, key and browser instance'
   assert.ok(!JSON.stringify(h.store).includes('private@example.org'));assert.ok(!h.calls.some(c=>c.options.body.includes('http')));
 });
 test('Studio variant maps to Studio entitlements',async()=>{const h=harness();h.studio();assert.equal((await h.P.activate(config,key)).plan,'studio');});
+test('A single configured Plus product activates without a second tier',async()=>{const h=harness();const single={...config,products:{plus:config.products.pro}};assert.equal(billingConfig(single).products.plus.variantId,9);assert.equal((await h.P.activate(single,key)).plan,'plus');});
 test('Repeated activation validates the existing instance without consuming another seat',async()=>{const h=harness();await h.P.activate(config,key);await h.P.activate(config,key);assert.equal(h.calls.filter(c=>c.url.endsWith('/activate')).length,1);});
 test('A different key cannot orphan the active browser seat',async()=>{const h=harness();await h.P.activate(config,key);await assert.rejects(()=>h.P.activate(config,'another-license'));});
 for(const mode of ['wrong-store','wrong-product'])test(`Preflight rejects ${mode} before consuming an activation`,async()=>{const h=harness();h.setMode(mode);await assert.rejects(()=>h.P.activate(config,key));assert.equal(h.calls.length,1);});

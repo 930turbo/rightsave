@@ -42,7 +42,9 @@ globalThis.RightSavePro = (() => {
     const minWidth=Number(value.minWidth);
     if(!Number.isInteger(minWidth)||minWidth<0||minWidth>20000)throw new Error("Minimum width must be 0–20,000 pixels.");
     if(!["all","image","video"].includes(value.filter)||!["page","largest","name"].includes(value.sort)||!["large","xl"].includes(value.size))throw new Error("Invalid workflow options.");
-    return {name:value.name.trim(),template:value.template,search:value.search,minWidth,filter:value.filter,sort:value.sort,size:value.size};
+    const format=value.format??"all",orientation=value.orientation??"all",unique=value.unique??false;
+    if(!["all","jpg","png","webp","avif","gif","svg","mp4","webm"].includes(format)||!["all","landscape","portrait","square"].includes(orientation)||typeof unique!=="boolean")throw new Error("Invalid workflow filters.");
+    return {name:value.name.trim(),template:value.template,search:value.search,minWidth,filter:value.filter,sort:value.sort,size:value.size,format,orientation,unique};
   }
   async function presets(){
     await RightSaveCommerce.requirePro();
@@ -91,5 +93,22 @@ globalThis.RightSavePro = (() => {
     const columns=["filename","label","page","media","width","height","bytes"];
     return {json:JSON.stringify({created:new Date().toISOString(),notice:"URLs omit query strings. Source records do not grant reuse rights.",files:records},null,2),csv:[columns,...records.map(r=>columns.map(c=>r[c]))].map(row=>row.map(cell).join(",")).join("\r\n")+"\r\n"};
   }
-  return {Zip,crc32,preset,presets,savePreset,removePreset,fetchFile,exportPack,importPack,sourceRecords,MAX_BYTES,MAX_FILE};
+  async function convert(url,type,maxEdge=0){
+    await RightSaveCommerce.requirePro();
+    if(!["image/png","image/jpeg","image/webp"].includes(type)||!Number.isInteger(maxEdge)||maxEdge<0||maxEdge>8192)throw new Error("Choose PNG, JPEG or WebP and a valid maximum size.");
+    const bytes=await fetchFile(url,AbortSignal.timeout(30000));
+    const image=await createImageBitmap(new Blob([bytes]));
+    try{
+      if(image.width*image.height>16000000)throw new Error("This image is too large to convert here. Save the original instead (16 megapixel conversion limit).");
+      const ratio=maxEdge?Math.min(1,maxEdge/Math.max(image.width,image.height)):1;
+      const width=Math.max(1,Math.round(image.width*ratio)),height=Math.max(1,Math.round(image.height*ratio));
+      const canvas=new OffscreenCanvas(width,height),context=canvas.getContext("2d");
+      if(type==="image/jpeg"){context.fillStyle="#ffffff";context.fillRect(0,0,width,height);}
+      context.drawImage(image,0,0,width,height);
+      const blob=await canvas.convertToBlob({type,quality:.92});
+      if(blob.type!==type)throw new Error("This browser cannot export the selected format. Try PNG.");
+      return {blob,width,height};
+    }finally{image.close();}
+  }
+  return {Zip,crc32,preset,presets,savePreset,removePreset,fetchFile,exportPack,importPack,sourceRecords,convert,MAX_BYTES,MAX_FILE};
 })();

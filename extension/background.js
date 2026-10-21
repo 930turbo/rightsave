@@ -231,6 +231,13 @@ RS.listen((message, sender) => {
       return {id:await save({url:message.url,kind:"document",mime:"application/zip",suggestedName:"rightsave-collection.zip"},message.tabId)};
     }catch(error){return {error:error.message};}
   })();
+  if (message.type === "save-converted") return (async () => {
+    try{
+      await RightSaveCommerce.requirePro();
+      if(typeof message.url!=="string"||!message.url.startsWith("blob:"+browser.runtime.getURL(""))||!["image/png","image/jpeg","image/webp"].includes(message.mime))throw new Error("Invalid converted image.");
+      return {id:await save({url:message.url,kind:"document",mime:message.mime,suggestedName:message.filename},message.tabId)};
+    }catch(error){return {error:error.message};}
+  })();
   if (message.type === "save-workflow-pack") return (async () => {
     try{
       await RightSaveCommerce.requireStudio();

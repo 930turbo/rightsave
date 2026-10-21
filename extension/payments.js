@@ -5,7 +5,7 @@ globalThis.RightSavePayments = (() => {
   const api = "https://api.lemonsqueezy.com/v1/licenses/";
   function product(config, plan) {
     const p = config?.products?.[plan];
-    if (!["pro", "studio"].includes(plan) || !p) throw new Error("This plan is not available yet.");
+    if (!["plus", "pro", "studio"].includes(plan) || !p) throw new Error("This upgrade is not available yet.");
     return p;
   }
   function checkout(config, plan) {
@@ -26,13 +26,13 @@ globalThis.RightSavePayments = (() => {
   }
   function entitlement(config, data, key, instance) {
     const meta = data.meta, license = data.license_key;
-    const pair = Object.entries(config.products).find(([plan, p]) => ["pro","studio"].includes(plan) && Number(p.productId) === meta?.product_id && Number(p.variantId) === meta?.variant_id);
+    const pair = Object.entries(config.products).find(([plan, p]) => ["plus","pro","studio"].includes(plan) && Number(p.productId) === meta?.product_id && Number(p.variantId) === meta?.variant_id);
     if (!pair || meta?.store_id !== Number(config.storeId) || license?.key !== key || license.status !== "active" || !data.instance?.id || (instance && data.instance.id !== instance)) throw new Error("This license is inactive or belongs to another product.");
     const expires = license.expires_at ? Date.parse(license.expires_at) : null;
     if (expires !== null && (!Number.isFinite(expires) || expires <= Date.now())) throw new Error("This license has expired.");
     return {product:"rightsave", id:String(license.id), plan:pair[0], expires, provider:"lemonsqueezy"};
   }
-  const identity = config => JSON.stringify([config.storeId, config.products.pro?.productId, config.products.pro?.variantId, config.products.studio?.productId, config.products.studio?.variantId, config.testMode]);
+  const identity = config => JSON.stringify([config.storeId,Object.entries(config.products).filter(([p])=>["plus","pro","studio"].includes(p)).map(([p,v])=>[p,v.productId,v.variantId]),config.testMode]);
   async function write(record) { await browser.storage.local.set({purchaseLicense:record}); memory=record; }
   async function clear() { memory=null; await browser.storage.local.remove("purchaseLicense"); }
   async function validate(config, record) {
@@ -60,7 +60,7 @@ globalThis.RightSavePayments = (() => {
         const current = (await browser.storage.local.get("purchaseLicense")).purchaseLicense;
         if (!current) return {error:error.message};
         retryAt=Date.now()+3600000;
-        if (age >= 0 && age < GRACE && ["pro","studio"].includes(record.claims?.plan) && (!record.claims.expires || record.claims.expires > Date.now())) return {claims:record.claims, checked:record.checked, offline:true};
+        if (age >= 0 && age < GRACE && ["plus","pro","studio"].includes(record.claims?.plan) && (!record.claims.expires || record.claims.expires > Date.now())) return {claims:record.claims, checked:record.checked, offline:true};
         return {error:"Reconnect to check your license. Free saving is still available."};
       }
     })();
@@ -78,7 +78,7 @@ globalThis.RightSavePayments = (() => {
     // Validate ownership before consuming an activation for an unrelated product.
     const preflight=await request("validate",{license_key:key});
     const meta=preflight.meta;
-    if (preflight.valid !== true || meta?.store_id !== Number(config.storeId) || !Object.entries(config.products).some(([plan,p])=>["pro","studio"].includes(plan)&&Number(p.productId)===meta?.product_id&&Number(p.variantId)===meta?.variant_id)) throw new Error("This key is not a valid RightSave license.");
+    if (preflight.valid !== true || meta?.store_id !== Number(config.storeId) || !Object.entries(config.products).some(([plan,p])=>["plus","pro","studio"].includes(plan)&&Number(p.productId)===meta?.product_id&&Number(p.variantId)===meta?.variant_id)) throw new Error("This key is not a valid RightSave license.");
     const data=await request("activate",{license_key:key,instance_name:"RightSave "+crypto.randomUUID().slice(0,8)});
     if (data.activated !== true) throw new Error("Could not activate this browser. Check the key or free an activation in your other browser.");
     let claims;

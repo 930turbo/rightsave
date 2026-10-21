@@ -4,6 +4,6 @@ All-site access: discover clicked media and scan arbitrary user-selected pages/f
 
 The social MAIN-world bridge has no extension privileges. It reads bounded selected same-platform response text transiently; isolated code keeps only validated media fields. No eval, remote executable code, API requests, developer backend or telemetry. User opt-out and site exceptions clear caches.
 
-The default package is Free, with no configured payment provider or signing key. Paid tools are disabled. A separately configured merchant build uses Lemon Squeezy hosted checkout and its public License API; only license keys and random instance identifiers go to billing, never browsing history or media. It declares authentication-information transmission on Firefox. Signed offline licenses are also supported. ZIP and batch tools require Pro; shared workflow packs and source records require Studio. Core saving stays free. See store/billing.html for the flow, test-mode setup, refund handling and launch requirements.
+This submitted package is Free, with billing unconfigured and licensed tools hidden. It makes no billing requests. No payment SDK or remote executable script is loaded. The optional license and collection modules in source are inactive in this build. Free shape, format and width filters do not require a license.
 
 Use README.md, docs/privacy.html, docs/compatibility.html and store/submission.html for details.

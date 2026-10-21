@@ -37,7 +37,7 @@ test('Studio workflow packs round-trip allowlisted fields and reject malformed i
   const before=JSON.stringify(store);await assert.rejects(()=>P.importPack(JSON.stringify({product:'rightsave',version:1,workflows:[valid,{...valid,size:'unknown'}]})));assert.equal(JSON.stringify(store),before);
   await P.importPack(JSON.stringify({product:'rightsave',version:1,workflows:[{...valid,name:'Shared',injected:'discard'}]}));assert.equal(store.workflowPresets[1].injected,undefined);
 });
-test('Pro does not unlock Studio pack operations',async()=>{entitled=true;studio=false;await assert.rejects(()=>P.exportPack());await assert.rejects(()=>P.importPack('{}'));});
+test('Free cannot unlock portable workflow operations',async()=>{entitled=false;studio=false;await assert.rejects(()=>P.exportPack());await assert.rejects(()=>P.importPack('{}'));});
 test('Source records preserve actual archive names, redact signed queries and neutralize spreadsheet formulas',()=>{
   const records=P.sourceRecords([{filename:'images/photo (2).png',bytes:12,item:{label:'=HYPERLINK("evil")',url:'https://media.test/photo.png?token=private',pageURL:'https://social.test/post/1?secret=private#fragment',width:900,height:600}}]);
   assert.ok(!records.json.includes('private'));assert.ok(records.csv.includes("'=HYPERLINK"));const data=JSON.parse(records.json);assert.equal(data.files[0].filename,'images/photo (2).png');assert.equal(data.files[0].page,'https://social.test/post/1');

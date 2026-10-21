@@ -1,12 +1,18 @@
 RightSave
 
-Save images and direct-file videos with right-click, large previews, and social-site media detection.
+Save images and direct videos with right-click, large previews and useful filters.
 
-Free: unlimited individual Save As, large previews, Load all, search, site controls, media detection, canvas/SVG and video-frame export.
+RightSave Free gives you a proper Save As for media on webpages. Choose the filename and folder every time. When a site blocks right-click or puts an overlay in the way, RightSave looks for the media underneath.
 
-Optional paid tools: Pro adds ZIP collections, saved workflows, batch Save As, naming rules, dimension filters and list export. Studio adds portable workflow packs and CSV/JSON source records. Sales are not open; this package is the Free local edition and makes no billing requests.
+Open the media gallery to browse large previews, load them all or stop loading, search filenames and links, and filter by format, shape or minimum width. Group known X image size variants, copy a media URL, or open a larger preview and browse with the arrow keys. Individual saves are unlimited and no account is needed.
 
-Protected or segmented streams cannot be assembled. Reddit video-only tracks are labeled. Some sites require login and signed URLs can expire.
+Supports ordinary images, lazy-loaded media, CSS backgrounds, accessible frames, canvas and SVG, direct MP4/WebM files, and frame capture from unprotected videos. Enhanced detection reads media details already loaded by supported Instagram, Facebook, X, Reddit, Threads and LinkedIn pages. Open the post, scroll the carousel or play the video before rescanning.
 
-Privacy: https://github.com/930turbo/rightsave/blob/main/docs/privacy.html
+Right-click Save As can be turned off to use the normal browser submenu. Hold Shift while right-clicking for the browser menu, or Alt for website controls. Site exceptions are available in Settings. Dark, light and system appearance are supported.
+
+Protected playback and segmented video streams cannot be combined. Video tracks without their separate audio are clearly labeled. Some media requires a login, signed links can expire, and site changes may affect detection.
+
+Media is processed locally. Previews and saves contact the original media hosts. No analytics, advertising, developer media uploads or billing requests are active in this Free package.
+
+Privacy: https://930turbo.github.io/rightsave/privacy.html
 Support: https://github.com/930turbo/rightsave/issues

@@ -1,8 +1,8 @@
 {
-  "version": "3.1.0",
+  "version": "4.0.0",
   "edition": "free",
   "client_date": "2026-10-21",
-  "unit_checks": 58,
+  "unit_checks": 67,
   "firefox": {
     "checks": 44,
     "passed": [
@@ -122,17 +122,17 @@
     ],
     "browser": "156.0.8078.4"
   },
-  "pro_firefox": {
+  "licensed_firefox": {
     "checks": 3,
     "passed": [
-      "Signed test entitlement activates Firefox Pro UI",
+      "Signed test entitlement activates Firefox licensed UI",
       "Firefox native Save As receives one valid ZIP containing original image and canvas",
       "Firefox rejects archive access after license removal"
     ],
     "browser": "158.0.1"
   },
   "ui": {
-    "checks": 32,
+    "checks": 36,
     "passed": [
       "Viewport is 1440px wide",
       "Dark is the default appearance",
@@ -143,7 +143,7 @@
       "Desktop library has no horizontal overflow",
       "Viewport is 1280px wide",
       "Viewport is 1440px wide",
-      "Collection disclosure reveals batch and export controls",
+      "Free view exposes filters without upgrade advertising",
       "Viewport is 768px wide",
       "Library tools fit a 768px window",
       "Viewport is 390px wide",
@@ -151,6 +151,10 @@
       "Viewport is 320px wide",
       "Library tools fit a 320px window",
       "Viewport is 390px wide",
+      "Viewport is 1440px wide",
+      "Expanded preview has original-saving and navigation controls",
+      "Viewport is 320px wide",
+      "Expanded preview fits a 320px window",
       "Viewport is 1440px wide",
       "Desktop options has no horizontal overflow",
       "Viewport is 320px wide",
@@ -169,16 +173,18 @@
     ],
     "browser": "Chromium"
   },
-  "studio_chromium": {
-    "checks": 11,
+  "collections_chromium": {
+    "checks": 13,
     "passed": [
-      "Configured build labels hosted Pro and Studio checkout as tests",
-      "Receipt key activates Studio through the real background RPC",
+      "Configured build labels its hosted upgrade checkout as a test",
+      "Receipt key activates the upgrade through the real background RPC",
       "Customer email is discarded rather than stored",
       "Repeated activation does not consume another provider activation",
-      "Studio enables collection and source-record controls",
+      "Upgrade enables collection and source-record controls",
       "Native ZIP contains three exact photos and both source records",
       "Source records match archive filenames and the source page",
+      "Still-image conversion and resizing produce an actual WebP locally",
+      "ZIP duplicate removal compares actual bytes across different URLs",
       "Workflow pack saves the actual local workflow",
       "File import restores a portable workflow without uploading it",
       "Deactivation releases the provider instance before returning to Free",
@@ -186,16 +192,18 @@
     ],
     "browser": "156.0.8078.4"
   },
-  "studio_firefox": {
-    "checks": 11,
+  "collections_firefox": {
+    "checks": 13,
     "passed": [
-      "Configured build labels hosted Pro and Studio checkout as tests",
-      "Receipt key activates Studio through the real background RPC",
+      "Configured build labels its hosted upgrade checkout as a test",
+      "Receipt key activates the upgrade through the real background RPC",
       "Customer email is discarded rather than stored",
       "Repeated activation does not consume another provider activation",
-      "Studio enables collection and source-record controls",
+      "Upgrade enables collection and source-record controls",
       "Native ZIP contains three exact photos and both source records",
       "Source records match archive filenames and the source page",
+      "Still-image conversion and resizing produce an actual WebP locally",
+      "ZIP duplicate removal compares actual bytes across different URLs",
       "Workflow pack saves the actual local workflow",
       "File import restores a portable workflow without uploading it",
       "Deactivation releases the provider instance before returning to Free",
@@ -203,12 +211,55 @@
     ],
     "browser": "158.0.1"
   },
-  "total_checks": 210,
+  "gallery_chromium": {
+    "checks": 15,
+    "passed": [
+      "Free help contains no pricing or upgrade wall",
+      "Basic format, shape and width controls are available without a license",
+      "Portrait filter finds the actual portrait image",
+      "Square filter uses media dimensions",
+      "Format filter does not pretend PNG files are JPEG",
+      "Minimum width filtering works in Free",
+      "Reset restores the complete gallery",
+      "Copy link passes the exact selected URL to the clipboard API",
+      "Stop loading aborts an outstanding preview and restores controls",
+      "Stopped previews can be loaded again without starting a download",
+      "Expanded viewer moves to the next actual media item",
+      "Arrow keys navigate the expanded viewer",
+      "Viewer Save original requests the currently displayed source",
+      "Viewer conversion controls remain hidden in Free",
+      "Slash focuses the gallery search"
+    ],
+    "browser": "156.0.8078.4"
+  },
+  "gallery_firefox": {
+    "checks": 15,
+    "passed": [
+      "Free help contains no pricing or upgrade wall",
+      "Basic format, shape and width controls are available without a license",
+      "Portrait filter finds the actual portrait image",
+      "Square filter uses media dimensions",
+      "Format filter does not pretend PNG files are JPEG",
+      "Minimum width filtering works in Free",
+      "Reset restores the complete gallery",
+      "Copy link passes the exact selected URL to the clipboard API",
+      "Stop loading aborts an outstanding preview and restores controls",
+      "Stopped previews can be loaded again without starting a download",
+      "Expanded viewer moves to the next actual media item",
+      "Arrow keys navigate the expanded viewer",
+      "Viewer Save original requests the currently displayed source",
+      "Viewer conversion controls remain hidden in Free",
+      "Slash focuses the gallery search"
+    ],
+    "browser": "158.0.1"
+  },
+  "total_checks": 257,
   "web_ext_lint": {
     "errors": 0,
     "warnings": 0,
-    "notices": 0,
-    "free_and_merchant_builds": true
+    "notices": 0
   },
-  "scope": "Local fixtures and synthetic social payloads in disposable browser profiles. Native Save As is requested and tests automate its destination. Signed test entitlements and deterministic Lemon Squeezy responses exercise paid flows. No real merchant checkout, charge, refund or live logged-in feed is certified."
+  "store_preflight": "passed: both default packages are Free, billing is off, listing and graphics present",
+  "store_status": "Prepared for submission. Publisher registration and uploads follow separately; no store publication claimed.",
+  "scope": "Disposable Firefox and Chromium profiles with local media and synthetic social payloads. Tests automate native destinations while checking Save As is requested. Clipboard writes are captured by a fixture. Licensed conversion, byte-level deduplication and provider lifecycle use ephemeral or deterministic test entitlements. No real merchant payment, store review or every live logged-in feed is certified."
 }
