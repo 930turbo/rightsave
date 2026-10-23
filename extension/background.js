@@ -56,6 +56,12 @@ async function contextItems(info, tab) {
     info.srcUrl &&
     ["image", "video"].includes(info.mediaType) &&
     !items.some(
+      (item) =>
+        item.source === "Koofr original" &&
+        U.koofrFilePath(item.url, item.pageURL) ===
+          U.koofrFilePath(info.srcUrl, item.pageURL),
+    ) &&
+    !items.some(
       (item) => item.url === info.srcUrl && item.kind === info.mediaType,
     )
   ) {
@@ -149,7 +155,7 @@ async function scan(tabId) {
     })
     .slice(0, 1000);
 }
-function save(item, tabId, naming = {}) {
+function save(item, tabId) {
   const key = `${tabId}:${item.kind}:${item.url}`;
   if (pendingSaves.has(key)) return pendingSaves.get(key);
   const task = (async () => {
@@ -167,7 +173,7 @@ function save(item, tabId, naming = {}) {
       if (download?.state === "in_progress") return id;
     }
     try {
-      return await startSave(item, tabId, naming);
+      return await startSave(item, tabId);
     } catch (error) {
       if (canceled(error)) return null;
       throw error;
@@ -181,7 +187,7 @@ function save(item, tabId, naming = {}) {
     .catch(() => {});
   return task;
 }
-async function startSave(item, tabId, naming) {
+async function startSave(item, tabId) {
   if (U.issue(item)) throw new Error(U.issue(item));
   const tab = await browser.tabs.get(tabId);
   let url = item.url;
@@ -208,9 +214,7 @@ async function startSave(item, tabId, naming) {
   if (!U.usableURL(url))
     throw new Error("This page did not expose a downloadable media URL.");
   // Always let the user choose the destination in the browser file dialog.
-  const filename = naming.template
-    ? U.templatedFilename({ ...item, url }, naming.template, naming.index)
-    : U.filename({ ...item, url });
+  const filename = U.randomFilename({ ...item, url });
   const options = { url, filename, saveAs: true, conflictAction: "uniquify" };
   if (RS.isFirefox) options.incognito = tab.incognito;
   // downloads.download requires the cookies permission for cookieStoreId.
@@ -222,11 +226,11 @@ async function startSave(item, tabId, naming) {
     /^https?:/.test(url) &&
     /^https?:/.test(item.pageURL || "")
   ) {
-    const page = new URL(item.pageURL);
-    const media = new URL(url);
-    if (!(page.protocol === "https:" && media.protocol === "http:")) {
-      options.headers = [{ name: "Referer", value: page.origin + "/" }];
-    }
+    const referrer = U.downloadReferrer(
+      url,
+      U.koofrShare(tab.url) ? tab.url : item.pageURL,
+    );
+    if (referrer) options.headers = [{ name: "Referer", value: referrer }];
   }
   // Firefox's downloads API rejects data URLs; use an extension-owned Blob URL.
   let ownedBlobURL = "";
@@ -389,10 +393,7 @@ RS.listen((message, sender) => {
     return (async () => {
       try {
         return {
-          id: await save(message.item, message.tabId, {
-            template: message.template,
-            index: message.index,
-          }),
+          id: await save(message.item, message.tabId),
         };
       } catch (error) {
         return { error: error.message };
@@ -433,7 +434,7 @@ RS.listen((message, sender) => {
         }
         if (!U.usableURL(url))
           throw new Error("This file has no downloadable URL.");
-        return { url, filename: U.filename(item) };
+        return { url, filename: U.randomFilename({ ...item, url }) };
       } catch (error) {
         return { error: error.message };
       }
@@ -517,11 +518,8 @@ RS.listen((message, sender) => {
         )
           throw new Error("Select between 1 and 100 files for a batch.");
         const results = [];
-        for (const [index, item] of message.items.entries()) {
-          const id = await save(item, message.tabId, {
-            template: message.template,
-            index: index + 1,
-          });
+        for (const item of message.items) {
+          const id = await save(item, message.tabId);
           results.push({ id });
           if (id === null) return { results, canceled: true };
         }

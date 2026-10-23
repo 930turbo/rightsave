@@ -97,7 +97,7 @@
       steps: [
         [
           "Set up the library",
-          "Choose your filters, sort order and preview size. Add a filename template under Batch naming if you want one.",
+          "Choose your filters, sort order and preview size. Saved files receive random names automatically.",
         ],
         [
           "Name the workflow",
@@ -194,7 +194,10 @@
         url = URL.createObjectURL(await response.blob());
         const id = await browser.downloads.download({
           url,
-          filename,
+          filename: RightSaveUtil.randomFilename({
+            url: file,
+            suggestedName: filename,
+          }),
           saveAs: true,
           conflictAction: "uniquify",
         });

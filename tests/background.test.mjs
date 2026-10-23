@@ -206,3 +206,46 @@ test("Upgrade clears legacy activation data while retaining saved workflows", as
   assert.equal(e.local.purchaseLicense, undefined);
   assert.equal(e.local.workflowPresets.length, 1);
 });
+
+test("Legacy batch naming cannot override random basenames or disable Save As", async () => {
+  const e = environment(),
+    sender = { id: "test-id", url: "moz-extension://extension/library.html" };
+  const result = await e.context.receive(
+    {
+      type: "save-batch",
+      tabId: 1,
+      template: "original/{name}.{ext}",
+      items: [
+        { kind: "image", url: "https://media.test/photo.png" },
+        { kind: "video", url: "https://media.test/clip.webm" },
+      ],
+    },
+    sender,
+  );
+  assert.equal(result.results.length, 2);
+  assert.match(e.calls[0].filename, /^[a-f0-9]{32}\.png$/);
+  assert.match(e.calls[1].filename, /^[a-f0-9]{32}\.webm$/);
+  assert.ok(e.calls.every((call) => call.saveAs === true));
+});
+
+test("The native Koofr menu keeps the recovered original ahead of the browser thumbnail", async () => {
+  const e = environment(),
+    page = "https://app.koofr.net/links/Share123";
+  e.browser.tabs.sendMessage = async () => [
+    {
+      kind: "image",
+      url: "https://app.koofr.net/content/links/Share123/files/get/photo.png?path=%2F",
+      pageURL: page,
+      source: "Koofr original",
+    },
+  ];
+  e.context.info = {
+    srcUrl:
+      "https://app.koofr.net/content/links/Share123/files/get?path=%2F&thumb=huge",
+    mediaType: "image",
+    pageUrl: page,
+  };
+  const items = await vm.runInContext("contextItems(info,{id:1})", e.context);
+  assert.equal(items.length, 1);
+  assert.equal(items[0].source, "Koofr original");
+});

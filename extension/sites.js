@@ -1,6 +1,7 @@
 /* Bounded, pure media-data adapters. Page data is untrusted; never execute it. */
 globalThis.RightSaveSites = (() => {
   const definitions = [
+    ["app.koofr.net", "Koofr"],
     ["instagram.com", "Instagram"],
     ["facebook.com", "Facebook"],
     ["x.com", "X"],
@@ -55,6 +56,60 @@ globalThis.RightSaveSites = (() => {
       postURL: http(item.postURL, pageURL),
       audio: ["separate", "none"].includes(item.audio) ? item.audio : "unknown",
     };
+  }
+  function koofrData(data, pageURL, responseURL) {
+    const U = globalThis.RightSaveUtil,
+      share = U?.koofrShare(pageURL);
+    if (!share || !data || typeof data !== "object") return [];
+    try {
+      const request = new URL(responseURL);
+      const match = /^\/api\/v2\/public\/links\/([\w-]+)(\/bundle)?$/.exec(
+        request.pathname,
+      );
+      if (
+        request.origin !== share.url.origin ||
+        !match ||
+        match[1] !== share.id ||
+        request.username ||
+        request.password
+      )
+        return [];
+      const path = match[2] ? request.searchParams.get("path") || "/" : "/";
+      const result = [];
+      function add(file, filePath) {
+        if (
+          !file ||
+          file.type !== "file" ||
+          typeof file.name !== "string" ||
+          file.name.length > 255 ||
+          /[/\\\x00-\x1f]/.test(file.name)
+        )
+          return;
+        const url = new URL(
+          `/content/links/${share.id}/files/get/${encodeURIComponent(file.name)}`,
+          pageURL,
+        );
+        url.searchParams.set("path", filePath);
+        // Keep only the access parameter already used by this page request.
+        if (request.searchParams.has("password"))
+          url.searchParams.set(
+            "password",
+            request.searchParams.get("password"),
+          );
+        const item = U.koofrOriginal(url.href, pageURL, {
+          mime: file.contentType,
+          label: file.name,
+        });
+        if (item) result.push(item);
+      }
+      add(data.file, path);
+      if (match[2] && data.file?.type === "dir" && Array.isArray(data.files))
+        for (const file of data.files.slice(0, 300))
+          add(file, (path === "/" ? "/" : path + "/") + file.name);
+      return result;
+    } catch {
+      return [];
+    }
   }
   function extract(data, pageURL) {
     const name = site(pageURL) || "Website";
@@ -409,6 +464,7 @@ globalThis.RightSaveSites = (() => {
   }
   return {
     site,
+    koofrData,
     clean,
     extract,
     parse,

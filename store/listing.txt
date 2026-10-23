@@ -13,12 +13,15 @@ Use the media library when you want more than one file:
 • Browse large previews, search filenames and filter by format, shape or size.
 • Watch direct video previews with playback controls, then save the original file.
 • Select files and save them together in one ZIP, with optional source records.
+• Give every saved file a fresh random name while keeping its file type.
 • Skip identical files by comparing their actual bytes.
 • Save a PNG, JPEG or WebP copy and resize it on your device.
-• Remember filters and filename templates in saved workflows.
+• Remember filters and preview size in saved workflows.
 • Follow short how-to guides and try a practice save inside the extension.
 
 RightSave finds regular and lazy-loaded images, CSS backgrounds, accessible frames, canvas and SVG. It saves direct MP4, WebM and Ogg video files and can capture a frame from an unprotected video. Enhanced detection reads media details already loaded by supported Instagram, Facebook, X, Reddit, Threads and LinkedIn pages. Open the post, scroll its carousel or play its video, then rescan.
+
+Koofr shared-link detection finds original image and video files behind supported previews using details the page has already loaded. Enter any share password on Koofr and open the file first. Existing access restrictions and expiry still apply.
 
 Every tool is free. There is no account, paywall, advertising or analytics. Processing stays on your device; previews and downloads contact the original media hosts. The developer does not receive your files or browsing history.
 

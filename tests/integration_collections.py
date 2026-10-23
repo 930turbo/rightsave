@@ -1,3 +1,4 @@
+import re
 """Real-browser free collection, conversion and workflow integration.
 No merchant requests or credentials. Native Save As is recorded then automated.
 """
@@ -64,8 +65,8 @@ try:
     wait.until(lambda d:ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:1}))[0]?.state;')=='complete')
     saved=Path(ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:1}))[0].filename;'))
     with zipfile.ZipFile(saved) as z:
-        record=json.loads(z.read('_rightsave/sources.json'))
-        check('Native ZIP contains three exact photos and both source records',z.testzip() is None and len(z.namelist())==5 and z.read('coast-photo.png')==(root/'docs/demo/coast-photo.png').read_bytes() and '_rightsave/sources.csv' in z.namelist())
+        record=json.loads(z.read(next(n for n in z.namelist() if n.endswith('.json'))))
+        check('Native ZIP contains original photos and randomly named source records',z.testzip() is None and len(z.namelist())==5 and any(z.read(n)==(root/'docs/demo/coast-photo.png').read_bytes() for n in z.namelist() if n.endswith('.png')) and any(n.endswith('.csv') for n in z.namelist()) and all(re.fullmatch(r'[a-f0-9]{32}\.(png|json|csv)',n) for n in z.namelist()))
         check('Source records match archive filenames and the source page',len(record['files'])==3 and all(row['filename'] in z.namelist() and row['page'].startswith(base) for row in record['files']))
     driver.find_element(By.ID,'load-all').click();wait.until(lambda d:driver.find_element(By.ID,'load-all').is_enabled())
     driver.find_element(By.CSS_SELECTOR,'.preview img').click();wait.until(lambda d:driver.find_element(By.ID,'zoom').get_attribute('open'))
@@ -87,7 +88,7 @@ try:
     wait.until(lambda d:'1 duplicate skipped' in driver.find_element(By.ID,'archive-status').text)
     wait.until(lambda d:ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:1}))[0]?.state;')=='complete')
     unique=Path(ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:1}))[0].filename;'))
-    with zipfile.ZipFile(unique) as z:check('ZIP duplicate removal compares actual bytes across different URLs',len(z.namelist())==5 and len(json.loads(z.read('_rightsave/sources.json'))['files'])==3)
+    with zipfile.ZipFile(unique) as z:check('ZIP duplicate removal compares actual bytes across different URLs',len(z.namelist())==5 and len(json.loads(z.read(next(n for n in z.namelist() if n.endswith('.json'))))['files'])==3)
     driver.find_element(By.CSS_SELECTOR,'#workflow-tools > summary').click();driver.find_element(By.ID,'preset-name').send_keys('Shared collection');driver.find_element(By.ID,'save-preset').click();wait.until(lambda d:'Workflow saved' in driver.find_element(By.ID,'notice').text)
     # The shared-controls disclosure follows workflow-tools.
     driver.find_element(By.ID,'export-pack').find_element(By.XPATH,'ancestor::details[1]').find_element(By.TAG_NAME,'summary').click()

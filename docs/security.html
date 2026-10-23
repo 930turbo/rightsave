@@ -82,7 +82,7 @@
     </nav>
     <h1>Release review</h1>
     <p>
-      RightSave 5.1.0. Reviewed October 21, 2026. This documents the checks
+      RightSave 5.2.0. Reviewed October 23, 2026. This documents the checks
       performed for this release; it is not a guarantee against every defect or
       future website change.
     </p>
@@ -107,7 +107,7 @@
     <p>
       Social parsers bound input size, depth, node count and output. They never
       evaluate page text. Inline SVG export removes active content and external
-      references. Filenames and ZIP paths reject traversal; CSV records
+      references. Saved basenames use 128 bits of browser cryptographic randomness. ZIP paths reject traversal; CSV records
       neutralize formula prefixes. Workflow imports validate every entry before
       writing. ZIP and conversion enforce memory limits.
     </p>
@@ -124,7 +124,7 @@
     <h2>Practical limits</h2>
     <p>
       Representative platform fixtures cover Instagram, Facebook, X, Reddit,
-      Threads and LinkedIn. These do not certify every logged-in feed. Stream
+      Threads, LinkedIn and Koofr shared links. These do not certify every live share or logged-in feed. Stream
       merging and protected playback are unsupported. Existing access on the
       source site is still required. Files and exported records remain the
       user’s responsibility after saving. Mozilla signing and review are

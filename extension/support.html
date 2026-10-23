@@ -116,16 +116,45 @@
             <h2>Remember your filters and filenames</h2>
             <p>
               Under Saved workflows, name the current setup and save it. Apply
-              it next time to restore filters, preview size and naming rules.
-              Export a workflow pack to move it to another browser.
+              it next time to restore filters and preview size. Export a
+              workflow pack to move it to another browser.
             </p>
             <button class="text-button" data-guide="workflows">
               Set up a workflow
             </button>
             <p class="small muted">
-              Use {name}, {ext}, {index}, {site} and {date} in a filename
-              template. For example: {site}/{name}-{index}.{ext}. Up to 20
-              workflows are stored locally.
+              Files always receive random names. Up to 20 workflows are stored
+              locally.
+            </p>
+          </section>
+          <section class="help-article" id="koofr" data-help>
+            <h2>Save from a Koofr shared link</h2>
+            <ol>
+              <li>
+                Open the share and enter its password on Koofr if it asks.
+              </li>
+              <li>
+                Open the photo or video you want. Refresh the page if you just
+                installed or updated RightSave.
+              </li>
+              <li>
+                Right-click the media, or open RightSave and choose Rescan page.
+                Look for <strong>Koofr original</strong>.
+              </li>
+              <li>
+                Choose a folder in Save As. The suggested name is random; the
+                file type stays the same.
+              </li>
+            </ol>
+            <p>
+              For a shared folder, open a file first if its preview is missing.
+              Keep the Koofr tab open. Expired or inaccessible shares need a
+              working link. If ZIP is rejected, use individual Save As.
+            </p>
+            <p class="small muted">
+              Every save gets a new random name, including videos, converted
+              images and files inside ZIPs. This does not remove metadata from
+              the original file or clear download history.
             </p>
           </section>
           <section class="help-article" id="troubleshooting" data-help>
@@ -270,6 +299,7 @@
       </main>
     </div>
     <script src="compat.js"></script>
+    <script src="shared.js"></script>
     <script src="support.js"></script>
   </body>
 </html>

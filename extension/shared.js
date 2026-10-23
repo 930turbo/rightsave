@@ -82,47 +82,174 @@ globalThis.RightSaveUtil = (() => {
     }
     return urls;
   }
-  function templatedFilename(item, template, index = 1) {
-    const original = filename(item);
-    const dot = original.lastIndexOf(".");
-    const parts = {
-      name: dot < 0 ? original : original.slice(0, dot),
-      ext: dot < 0 ? "" : original.slice(dot + 1),
-      index: String(index).padStart(3, "0"),
-      date: new Date().toISOString().slice(0, 10),
-      site: "webpage",
-    };
-    try {
-      parts.site = new URL(item.pageURL).hostname || "local";
-    } catch {
-      /* Fallback */
-    }
-    if (!template || template.length > 160 || /^[\\/]|^[a-z]:/i.test(template))
-      throw new Error(
-        "Use a relative filename template, up to 160 characters.",
-      );
-    const replaced = template.replace(
-      /\{(name|ext|index|date|site)\}/g,
-      (_, key) => parts[key],
-    );
-    const segments = replaced.split("/");
-    if (
-      segments.length > 4 ||
-      segments.some((s) => !s.trim() || /^\.+$/.test(s.trim()))
+  function randomFilename(item) {
+    const bytes = crypto.getRandomValues(new Uint8Array(16));
+    const stem = Array.from(bytes, (byte) =>
+      byte.toString(16).padStart(2, "0"),
+    ).join("");
+    const mime = String(
+      item.mime || /^data:([^;,]+)/.exec(item.url || "")?.[1] || "",
     )
-      throw new Error(
-        "The template contains an invalid folder or too many folders.",
+      .split(";")[0]
+      .trim()
+      .toLowerCase();
+    const known = {
+      "image/jpeg": "jpg",
+      "image/png": "png",
+      "image/webp": "webp",
+      "image/gif": "gif",
+      "image/svg+xml": "svg",
+      "image/avif": "avif",
+      "image/bmp": "bmp",
+      "image/tiff": "tiff",
+      "image/heic": "heic",
+      "video/mp4": "mp4",
+      "video/webm": "webm",
+      "video/ogg": "ogv",
+      "video/quicktime": "mov",
+      "video/x-matroska": "mkv",
+      "application/zip": "zip",
+      "application/json": "json",
+      "text/csv": "csv",
+    }[mime];
+    // Unrecognized endpoints stay extensionless; the browser can infer the response type.
+    const extension =
+      known || /\.([a-z0-9]{2,6})$/i.exec(filename(item))?.[1].toLowerCase();
+    return stem + (extension ? "." + extension : "");
+  }
+  function koofrShare(value) {
+    try {
+      const url = new URL(value);
+      if (
+        url.hostname !== "app.koofr.net" ||
+        url.protocol !== "https:" ||
+        url.username ||
+        url.password
+      )
+        return null;
+      const id = /^\/links\/([\w-]{4,200})\/?$/.exec(url.pathname)?.[1];
+      return id ? { url, id } : null;
+    } catch {
+      return null;
+    }
+  }
+  function koofrOriginal(value, pageURL, hint = {}) {
+    const share = koofrShare(pageURL);
+    if (!share || typeof value !== "string" || value.length > 12000)
+      return null;
+    try {
+      const url = new URL(value, pageURL);
+      if (url.origin !== share.url.origin || url.username || url.password)
+        return null;
+      const match =
+        /^\/content\/links\/([\w-]+)\/files\/get(?:\/([^/]+))?$/.exec(
+          url.pathname,
+        );
+      if (!match || match[1] !== share.id) return null;
+      const path = url.searchParams.get("path");
+      if (
+        !path ||
+        !path.startsWith("/") ||
+        path.length > 4000 ||
+        /[\x00-\x1f\\]/.test(path) ||
+        path.split("/").some((p) => p === "." || p === "..")
+      )
+        return null;
+      const name =
+        path === "/"
+          ? decodeURIComponent(match[2] || "")
+          : path.split("/").pop();
+      const extension = /\.([a-z0-9]+)$/i.exec(name)?.[1].toLowerCase();
+      const types = {
+        jpg: "image/jpeg",
+        jpeg: "image/jpeg",
+        png: "image/png",
+        webp: "image/webp",
+        gif: "image/gif",
+        avif: "image/avif",
+        svg: "image/svg+xml",
+        bmp: "image/bmp",
+        tif: "image/tiff",
+        tiff: "image/tiff",
+        heic: "image/heic",
+        mp4: "video/mp4",
+        webm: "video/webm",
+        ogv: "video/ogg",
+        mov: "video/quicktime",
+        mkv: "video/x-matroska",
+        m4v: "video/mp4",
+      };
+      const thumbnail = url.searchParams.has("thumb");
+      const mime =
+        types[extension] ||
+        (!thumbnail && /^(image|video)\//.test(hint.mime || "")
+          ? hint.mime
+          : "");
+      // A thumbnail for an unknown file (PDF, folder, RAW, etc.) is not an original image.
+      if (!mime) return null;
+      const poster = thumbnail ? url.href : "";
+      if (!match[2] && name) url.pathname += "/" + encodeURIComponent(name);
+      url.searchParams.delete("thumb");
+      url.searchParams.delete("convert");
+      url.hash = "";
+      return {
+        url: url.href,
+        pageURL,
+        kind: mime.startsWith("video/") ? "video" : "image",
+        mime,
+        label: name || hint.label || "Shared media",
+        suggestedName: name,
+        source: "Koofr original",
+        poster,
+        koofrPath: path,
+      };
+    } catch {
+      return null;
+    }
+  }
+  function koofrFilePath(value, pageURL) {
+    const share = koofrShare(pageURL);
+    if (!share || typeof value !== "string" || value.length > 12000)
+      return null;
+    try {
+      const url = new URL(value, pageURL);
+      const match = /^\/content\/links\/([\w-]+)\/files\/get(?:\/[^/]+)?$/.exec(
+        url.pathname,
       );
-    return segments
-      .map((segment) => {
-        let clean = segment
-          .replace(/[<>:"\\|?*\u0000-\u001f]/g, "_")
-          .replace(/^[. ]+|[. ]+$/g, "");
-        if (/^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(clean))
-          clean = "_" + clean;
-        return clean.slice(0, 180) || "media";
-      })
-      .join("/");
+      const path = url.searchParams.get("path");
+      return url.origin === share.url.origin &&
+        !url.username &&
+        !url.password &&
+        match?.[1] === share.id &&
+        path?.startsWith("/") &&
+        path.length <= 4000 &&
+        !/[\x00-\x1f\\]/.test(path) &&
+        !path.split("/").some((p) => p === "." || p === "..")
+        ? path
+        : null;
+    } catch {
+      return null;
+    }
+  }
+  function downloadReferrer(url, pageURL) {
+    try {
+      const page = new URL(pageURL),
+        media = new URL(url);
+      if (
+        !/^https?:$/.test(page.protocol) ||
+        !/^https?:$/.test(media.protocol) ||
+        (page.protocol === "https:" && media.protocol === "http:")
+      )
+        return "";
+      const share = koofrShare(pageURL);
+      if (share && koofrOriginal(url, pageURL)) {
+        // Share identity is necessary for Koofr. Never copy passwords, tokens or fragments to Referer.
+        return page.origin + page.pathname;
+      }
+      return page.origin + "/";
+    } catch {
+      return "";
+    }
   }
   function publicURL(value) {
     try {
@@ -177,7 +304,11 @@ globalThis.RightSaveUtil = (() => {
     issue,
     filename,
     cssURLs,
-    templatedFilename,
+    randomFilename,
+    koofrShare,
+    koofrOriginal,
+    koofrFilePath,
+    downloadReferrer,
     publicURL,
     mediaList,
     videoPreviewURL,

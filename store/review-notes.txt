@@ -1,4 +1,4 @@
-RightSave 5.1.0 — reviewer notes
+RightSave 5.2.0 — reviewer notes
 
 Single purpose: discover and save webpage media explicitly chosen by the user.
 All features are free. No account, billing, activation or feature-gating modules
@@ -17,6 +17,15 @@ same-platform responses already requested by the page, without extra API
 requests. Isolated code retains validated media fields, not raw responses.
 Opt-out and site exceptions clear caches. Request observations skip excluded
 sites and clear on navigation, tab closure and permission removal.
+
+Koofr shared-link support observes only /api/v2/public/links/{current-share-id}
+and its /bundle response on https://app.koofr.net/links/*. It reads the file,
+type, name and contentType fields and preserves only the already-used password
+parameter in the download URL. No extra API calls, cookie reads or account
+enumeration. Thumbnail URLs are matched to the same shared file path. Firefox
+download Referer uses the share path, without query strings or fragments.
+All saved basenames, ZIP entries and exports use crypto.getRandomValues (128 bits).
+Original labels stay in the gallery. Native Save As is always requested.
 
 Previews and saves contact original hosts. No user data is sent to the developer.
 No external credentials are needed to test the core features. The installed

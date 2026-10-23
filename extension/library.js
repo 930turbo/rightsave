@@ -449,8 +449,7 @@
     $("cancel-batch").textContent = "Stopping after this file…";
   };
   $("save-selected").onclick = async () => {
-    const items = data.items.filter((i) => selected.has(id(i))),
-      template = $("template").value.trim();
+    const items = data.items.filter((i) => selected.has(id(i)));
     if (!items.length || items.length > 100) {
       notice("Select 1–100 files for a batch.");
       return;
@@ -470,7 +469,6 @@
         const result = await send({
           type: "save",
           item,
-          template,
           index: index + 1,
         });
         if (result.error) throw new Error(result.error);
@@ -530,12 +528,6 @@
             "Select up to 98 files to leave room for two source records.",
           );
       }
-      if (withRecords)
-        for (const name of [
-          "_rightsave/sources.json",
-          "_rightsave/sources.csv",
-        ])
-          zip.names.add(name);
       for (const [index, item] of items.entries()) {
         if (zipController.signal.aborted)
           throw new DOMException("Canceled", "AbortError");
@@ -561,10 +553,7 @@
           }
           hashes.add(hash);
         }
-        const name = $("template").value.trim()
-          ? U.templatedFilename(item, $("template").value.trim(), index + 1)
-          : source.filename;
-        const filename = zip.add(name, bytes);
+        const filename = zip.add(source.filename, bytes);
         records.push({
           filename,
           item: { ...item, pageURL: item.pageURL || data.pageURL },
@@ -572,17 +561,15 @@
         });
       }
       if (withRecords) {
-        for (const name of [
-          "_rightsave/sources.json",
-          "_rightsave/sources.csv",
-        ])
-          zip.names.delete(name);
         const record = RightSaveCollections.sourceRecords(records);
         zip.add(
-          "_rightsave/sources.json",
+          U.randomFilename({ kind: "document", mime: "application/json" }),
           new TextEncoder().encode(record.json),
         );
-        zip.add("_rightsave/sources.csv", new TextEncoder().encode(record.csv));
+        zip.add(
+          U.randomFilename({ kind: "document", mime: "text/csv" }),
+          new TextEncoder().encode(record.csv),
+        );
       }
       owned = URL.createObjectURL(zip.blob());
       const result = await send({ type: "save-archive", url: owned });
@@ -634,7 +621,7 @@
     try {
       const p = await RightSaveCollections.savePreset({
         name: $("preset-name").value,
-        template: $("template").value,
+        template: "",
         search: $("search").value,
         minWidth: $("min-width").value,
         filter,
@@ -662,7 +649,6 @@
       $("search").value = p.search;
       $("min-width").value = p.minWidth;
       $("sort").value = p.sort;
-      $("template").value = p.template;
       $("preset-name").value = p.name;
       $("format").value = p.format;
       $("orientation").value = p.orientation;

@@ -30,7 +30,7 @@ Direct MP4, WebM and Ogg files are supported. The original file keeps its sound 
 
 ## Save a collection
 
-Select the files you want, then save them in one ZIP. RightSave can skip identical files by comparing their bytes and add CSV and JSON source records if you need them. Batch naming keeps filenames consistent; saved workflows remember your filters and naming rules.
+Select the files you want, then save them in one ZIP. RightSave can skip identical files by comparing their bytes and add CSV and JSON source records if you need them. Every file gets a fresh random name, including the files inside a ZIP. Saved workflows remember your filters and preview size.
 
 Open an image’s larger preview to resize it or save a PNG, JPEG or WebP copy. Everything runs on your device. ZIPs support up to 100 files, 40 MB per file and 150 MB total. Use individual saves for Firefox container sessions.
 
@@ -43,6 +43,14 @@ New to extensions? The quick start includes short walkthroughs and bundled pract
 Instagram, Facebook, X, Reddit, Threads and LinkedIn each expose media differently. RightSave reads media details the page has already loaded. Open the post, scroll through its carousel or play its video, then rescan. Higher-quality direct files appear when the page provides them.
 
 Sites change, and some videos aren’t delivered as a single file. Protected playback and segmented streams aren’t combined. Reddit’s separate video tracks are marked **Video only**. [Compatibility details](docs/compatibility.html).
+
+## Koofr shared links
+
+Open the shared link and enter its password on Koofr if needed. Open the photo or video, then right-click it or open RightSave and rescan. Refresh the Koofr page after updating the extension.
+
+RightSave looks for the original shared file behind thumbnails and blob previews. It uses file details the page has already loaded and keeps the access parameters needed for the download. The share must still be accessible; expired links and segmented or protected video remain limited. Koofr coverage is checked against local shared-link fixtures, not every live share.
+
+All saves use a new random 32-character name, followed by the file extension—for example, `d26b7d2cf9414afe868a06f4164a7cc8.mp4`. Save As still lets you choose the folder or change the name. Renaming does not remove metadata from the original file or clear your browser’s download history.
 
 ## Install
 
@@ -101,6 +109,8 @@ python tests/integration_help.py --browser firefox
 python tests/integration_help.py --browser chrome
 python tests/integration_video.py --browser firefox
 python tests/integration_video.py --browser chrome
+python tests/integration_koofr.py --browser firefox
+python tests/integration_koofr.py --browser chrome
 ```
 
 Set `FIREFOX_BINARY` or `CHROMIUM_BINARY` if needed. Chrome for Testing supports extension-loading flags. Automated checks cover representative fixtures, not every live logged-in feed. [Latest verification](docs/verification.json).

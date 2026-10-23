@@ -54,11 +54,64 @@
     )
       return;
     checkRoute();
-    remember(S.parse(event.data.text, location.href));
+    if (U.koofrShare(location.href)) {
+      try {
+        remember(
+          S.koofrData(
+            JSON.parse(event.data.text),
+            location.href,
+            event.data.responseURL,
+          ),
+        );
+      } catch {
+        /* Invalid JSON. */
+      }
+    } else remember(S.parse(event.data.text, location.href));
   });
+  function koofrDOM() {
+    if (!U.koofrShare(location.href)) return [];
+    const items = [];
+    for (const element of [
+      ...document.querySelectorAll("img,video,source,a[href]"),
+    ].slice(0, 1500)) {
+      for (const value of [
+        element.currentSrc,
+        element.src,
+        element.poster,
+        element.href,
+      ]) {
+        const original = U.koofrOriginal(value, location.href, {
+          mime: element.type,
+          label: element.alt || element.title,
+        });
+        if (original) items.push(original);
+      }
+    }
+    return items;
+  }
+  function koofrRelated(cached, target) {
+    if (!U.koofrShare(location.href)) return [];
+    const original =
+      U.koofrFilePath(target.url, location.href) ||
+      U.koofrFilePath(target.poster, location.href);
+    const path =
+      original || new URL(location.href).searchParams.get("path") || "/";
+    // A blob has no file identity. Resolve it only to the current shared file,
+    // never an arbitrary child in a folder or another carousel item.
+    if (!original && !target.url.startsWith("blob:")) return [];
+    return cached.filter((item) => {
+      const candidate = U.koofrOriginal(item.url, location.href, item);
+      return (
+        candidate &&
+        candidate.koofrPath === path &&
+        (original || item.kind === target.kind)
+      );
+    });
+  }
   function pageData() {
     checkRoute();
     if (!enhancedDetection || !restore) return [];
+    remember(koofrDOM());
     let budget = 4 * 1024 * 1024;
     for (const node of [
       ...document.querySelectorAll(
@@ -215,6 +268,18 @@
     };
     const add = (url, kind, source, mime = "", label = "") => {
       const normalized = U.usableURL(url, document.baseURI);
+      const koofr =
+        enhancedDetection &&
+        restore &&
+        U.koofrOriginal(normalized, location.href, { mime, label });
+      if (koofr) {
+        items.push({
+          ...common,
+          ...koofr,
+          poster: koofr.poster || common.poster,
+        });
+        return;
+      }
       if (normalized)
         items.push({
           ...common,
@@ -383,7 +448,10 @@
             .map((a) => a.href)
         : [];
       resolved.push(
-        ...S.related(cached, item, links, location.href).map((candidate) => ({
+        ...[
+          ...koofrRelated(cached, item),
+          ...S.related(cached, item, links, location.href),
+        ].map((candidate) => ({
           ...candidate,
           ref: item.ref,
         })),
@@ -471,7 +539,13 @@
       items: unique([
         ...allElements()
           .filter(visible)
-          .flatMap((e) => itemsFor(e)),
+          .flatMap((e) => itemsFor(e))
+          .flatMap((item) => {
+            const originals = koofrRelated(cached, item);
+            return originals.length
+              ? originals.map((original) => ({ ...original, ref: item.ref }))
+              : [item];
+          }),
         ...cached,
       ]),
       title: document.title,

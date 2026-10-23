@@ -1,3 +1,4 @@
+import re
 """Chromium MV3 integration. Save As options are recorded; the test alone
 substitutes automatic destinations so headless tests cannot strand OS dialogs."""
 import functools,http.server,json,os,sys,threading,time,urllib.request,shutil,subprocess,zipfile
@@ -108,10 +109,9 @@ try:
     driver.find_element(By.CSS_SELECTOR,'#library-tools > summary').click()
     for label in ['Under an overlay','Canvas']:
         card=next(e for e in driver.find_elements(By.CSS_SELECTOR,'.media-card') if label in e.text);card.find_element(By.CSS_SELECTOR,'.tile-select input').click()
-    driver.find_element(By.CSS_SELECTOR,'.naming summary').click();driver.find_element(By.ID,'template').send_keys('batch/{name}-{index}.{ext}')
     driver.find_element(By.ID,'save-selected').click();wait.until(lambda d:'2 files sent to Downloads' in d.find_element(By.ID,'notice').text)
     wait.until(lambda d:ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:2})).every(d=>d.state==="complete");'))
-    check('Selected-file batch requests safe naming and subfolder templates',evaluate('__saveCalls.slice(-2).map(c=>c.filename)')==['batch/image-001.png','batch/rightsave-image-002.png'])
+    check('Selected-file batch uses distinct random filenames',len(set(evaluate('__saveCalls.slice(-2).map(c=>c.filename)')))==2 and all(re.fullmatch(r'[a-f0-9]{32}\.png',n) for n in evaluate('__saveCalls.slice(-2).map(c=>c.filename)')))
     driver.find_element(By.ID,'export').click();wait.until(lambda d:ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:1}))[0]?.mime;')=='application/json')
     wait.until(lambda d:ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:1}))[0]?.state;')=='complete')
     export_file=Path(ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:1}))[0].filename;'))
@@ -120,7 +120,7 @@ try:
     wait.until(lambda d:ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:1}))[0]?.state;')=='complete')
     zip_file=Path(ext('return (await browser.downloads.search({orderBy:["-startTime"],limit:1}))[0].filename;'))
     with zipfile.ZipFile(zip_file) as archive:
-        check('Free ZIP export packages selected files and naming rules',archive.testzip() is None and archive.namelist()==['batch/image-001.png','batch/rightsave-image-002.png'] and archive.read('batch/image-001.png')==(assets/'image.png').read_bytes())
+        check('Free ZIP export uses random entry names and preserves photo bytes',archive.testzip() is None and len(archive.namelist())==2 and all(re.fullmatch(r'[a-f0-9]{32}\.png',n) for n in archive.namelist()) and any(archive.read(n)==(assets/'image.png').read_bytes() for n in archive.namelist()))
     before=evaluate('__saveCalls.length')
     driver.execute_script('document.getElementById("save-zip").click();document.getElementById("cancel-zip").click();')
     wait.until(lambda d:'canceled' in d.find_element(By.ID,'archive-status').text)

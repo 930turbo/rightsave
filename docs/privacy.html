@@ -82,7 +82,7 @@
     </nav>
     <h1>Privacy</h1>
     <p>
-      Updated October 21, 2026, for RightSave 5.1. RightSave saves files on your
+      Updated October 23, 2026, for RightSave 5.2. RightSave saves files on your
       device. It has no account system, checkout, license checks, advertising or
       analytics. The developer does not receive your media, page lists or
       troubleshooting summaries. Previews and downloads contact the original
@@ -90,7 +90,7 @@
     </p>
     <h2>Reading a page</h2>
     <p>
-      RightSave scans media on webpages you use. Enhanced social-site detection
+      RightSave scans media on webpages you use. Enhanced site detection
       is on by default. On supported sites it reads media fields from selected
       API or GraphQL responses the page already requested. It does not make
       extra platform API requests or read request bodies. Raw response text is
@@ -107,8 +107,7 @@
     <h2>What stays in this browser</h2>
     <p>
       Preferences, dismissed tips and explicitly saved workflows use browser
-      local storage. Workflows contain filters, search text, preview size and
-      naming rules; they do not contain a saved page history. Delete a workflow
+      local storage. Workflows contain filters, search text and preview size; they do not contain a saved page history. Delete a workflow
       in the library. Temporary libraries, source page URLs, observed video URLs
       and download bookkeeping use session storage. A library’s stored list
       clears when its source tab or library tab closes. Older lists also expire
@@ -123,6 +122,9 @@
       Settings to discard saved scans immediately. Existing open libraries may
       still display their in-memory list until you close them.
     </p>
+    <h2>Koofr shared links and random names</h2>
+    <p>On Koofr shared links, RightSave reads file details from public-share responses the page already requested. Access parameters already used by that page may remain in the original download URL, held in the temporary media list. RightSave never reads your saved passwords or cookie values. Firefox receives the share path as the download Referer, with query strings and fragments omitted.</p>
+    <p>Every save uses a cryptographically random basename, including ZIP entries and exported records. Original labels still appear in the gallery. Random names do not remove file metadata, conceal requests from the source host or clear browser download history.</p>
     <h2>Files you choose to export</h2>
     <p>
       ZIP files, image conversion and duplicate comparisons run locally. ZIP

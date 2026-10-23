@@ -1,4 +1,4 @@
-/* Main-world observer on the named social sites only. No extension privileges.
+/* Main-world observer on the supported media sites only. No extension privileges.
  * Observe media fields in responses the page itself requested. Never make API requests.
  * Pages can interfere with this bridge; isolated content code validates every item. */
 (() => {
@@ -6,6 +6,7 @@
   globalThis.__rightSavePageBridge = true;
   const LIMIT = 2 * 1024 * 1024;
   const domains = [
+    "app.koofr.net",
     "instagram.com",
     "facebook.com",
     "x.com",
@@ -26,6 +27,17 @@
   function responseURL(value, pageURL) {
     try {
       const u = new URL(value, pageURL);
+      if (location.hostname === "app.koofr.net") {
+        const id = /^\/links\/([\w-]+)\/?$/.exec(
+          new URL(pageURL).pathname,
+        )?.[1];
+        return (
+          u.origin === location.origin &&
+          !!id &&
+          (u.pathname === `/api/v2/public/links/${id}` ||
+            u.pathname === `/api/v2/public/links/${id}/bundle`)
+        );
+      }
       return (
         (u.hostname === domain || u.hostname.endsWith("." + domain)) &&
         /(?:graphql|\/api\/|\/voyager\/|\.json(?:$|\?))/.test(
@@ -36,7 +48,7 @@
       return false;
     }
   }
-  function publish(text, requestedRoute, requestedEpoch) {
+  function publish(text, requestedRoute, requestedEpoch, responseURL) {
     if (
       !enabled ||
       requestedRoute !== location.href ||
@@ -45,7 +57,7 @@
       return;
     if (text && text.length <= LIMIT)
       window.postMessage(
-        { rightsave: "json-v1", pageURL: requestedRoute, text },
+        { rightsave: "json-v1", pageURL: requestedRoute, text, responseURL },
         location.origin,
       );
   }
@@ -71,6 +83,7 @@
     try {
       if (
         enabled &&
+        response.ok &&
         inFlight < 2 &&
         (!wasEnabled || requestedEpoch === epoch) &&
         responseURL(response.url, requestedRoute) &&
@@ -120,6 +133,7 @@
                 new TextDecoder().decode(bytes),
                 requestedRoute,
                 observedEpoch,
+                response.url,
               );
           } catch {
             /* A failed observation never changes the site's response. */
@@ -152,6 +166,8 @@
         () => {
           if (
             !enabled ||
+            this.status < 200 ||
+            this.status >= 300 ||
             (wasEnabled && requestedEpoch !== epoch) ||
             !responseURL(this.responseURL, requestedRoute)
           )
@@ -163,7 +179,13 @@
                 : this.responseType === "" || this.responseType === "text"
                   ? this.responseText
                   : "";
-            if (text.length <= LIMIT) publish(text, requestedRoute, epoch);
+            if (text.length <= LIMIT)
+              publish(
+                text,
+                requestedRoute,
+                epoch,
+                this.responseURL || requests.get(this),
+              );
           } catch {
             /* Unsupported response types and site errors are ignored. */
           }

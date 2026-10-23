@@ -75,18 +75,30 @@ test("Filename sanitization handles encoded slashes and Windows devices", () => 
     "a_b.jpg",
   );
 });
-test("Batch templates never escape the download directory", () => {
+test("Every save gets a fresh cryptographic name and retains its file type", () => {
   const item = {
     url: "https://example.org/a.png",
     pageURL: "https://example.org",
     kind: "image",
   };
-  assert.equal(
-    U.templatedFilename(item, "{site}/{name}-{index}.{ext}", 2),
-    "example.org/a-002.png",
+  const names = Array.from({ length: 1000 }, () => U.randomFilename(item));
+  assert.equal(new Set(names).size, 1000);
+  assert.ok(names.every((name) => /^[a-f0-9]{32}\.png$/.test(name)));
+  for (const [mime, extension] of [
+    ["video/mp4", "mp4"],
+    ["application/zip", "zip"],
+    ["text/csv", "csv"],
+    ["application/json", "json"],
+    ["image/webp", "webp"],
+  ])
+    assert.match(
+      U.randomFilename({ ...item, mime }),
+      new RegExp("^[a-f0-9]{32}\\." + extension + "$"),
+    );
+  assert.match(
+    U.randomFilename({ url: "https://example.org/get", kind: "image" }),
+    /^[a-f0-9]{32}$/,
   );
-  for (const template of ["../x.png", "/x.png", "C:/x.png", "a/../x.png"])
-    assert.throws(() => U.templatedFilename(item, template));
 });
 
 test("URLs with embedded credentials are never treated as downloadable media", () => {

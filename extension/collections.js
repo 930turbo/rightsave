@@ -161,7 +161,7 @@ globalThis.RightSaveCollections = (() => {
       throw new Error("Invalid workflow filters.");
     return {
       name: value.name.trim(),
-      template: value.template,
+      template: "", // Older workflow naming rules are retired; all saves use random names.
       search: value.search,
       minWidth,
       filter: value.filter,
